@@ -38,3 +38,6 @@ node_modules/
 Thumbs.db
 .DS_Store
 .git-nested/
+
+# Project source folders kept locally, not in this repo
+source_code_projects/
