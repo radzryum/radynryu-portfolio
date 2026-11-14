@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+**/node_modules/
+**/packages/
+
+# Build outputs
+**/dist/
+**/build/
+**/.next/
+**/bin/
+**/obj/
+**/.cache/
+
+# Nested repository metadata (keep cymon as a plain folder, not a gitlink)
+**/.git/
+
+# Installers / executables
+*.exe
+*.msi
+*.nupkg
+
+# Heavy media — kept out of a small site repo (use Git LFS if you big files later)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.glb
+
+# Editor & OS junk
+**/.vscode/
+**/.idea/
+*.log
+*.tmp
+*.cache
+*.suo
+*.vsidx
+Thumbs.db
+.DS_Store
+.git-nested/

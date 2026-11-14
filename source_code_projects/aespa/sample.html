@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AesMERCH — Official AESPA merchandise shop. Browse albums, music videos, and exclusive content from Karina, Giselle, Winter, and Ningning.">
+    <meta name="keywords" content="AESPA, K-Pop, merchandise, albums, Armageddon, Whiplash, SM Entertainment, Karina, Giselle, Winter, Ningning">
+    <meta name="author" content="AesMERCH">
+    <meta property="og:title" content="AESPA | AesMERCH">
+    <meta property="og:description" content="Official AESPA merchandise — albums, music, and more.">
+    <title>AESPA | AesMERCH</title>
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <!-- Boxicons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="header">
+        <a href="#home" class="logo">
+            <img src="./img/aespaLogo.png" alt="AESPA Logo">
+        </a>
+        <nav class="navbar">
+            <a href="#home" class="active">Home</a>
+            <a href="#albums">Albums</a>
+            <a href="#about">About</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <div class="header-icons">
+            <i class="bx bx-moon" id="darkMode-icon" title="Toggle Dark Mode" role="button" aria-label="Toggle dark mode"></i>
+            <button id="cart-button" aria-label="Open shopping cart">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count">0</span>
+            </button>
+            <div class="bx bx-menu" id="menu-icon" role="button" aria-label="Open menu"></div>
+        </div>
+    </header>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- ==================== HOME ==================== -->
+    <section class="home" id="home">
+        <div class="video-container">
+            <video class="background-video" autoplay loop muted playsinline>
+                <source src="./img/aespabgVid.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="home-content">
+            <h3>Welcome to the World of</h3>
+            <h1><span>Avatar</span> &nbsp;||&nbsp; <span>Experience</span></h1>
+            <p>
+                AESPA is a South Korean girl group formed by SM Entertainment.
+                The group consists of four members: Karina, Giselle, Winter, and Ningning.
+            </p>
+            <p>
+                Each member has a corresponding virtual avatar, or "æ", who exists in the
+                virtual world. This concept is part of SM Entertainment's SM Culture Universe (SMCU),
+                creating an immersive storytelling experience through music, visuals, and digital content.
+            </p>
+            <div class="social-media">
+                <a href="https://www.facebook.com/aespa.official/" target="_blank" rel="noopener noreferrer" aria-label="AESPA Facebook">
+                    <i class="bx bxl-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com/aespa_official/" target="_blank" rel="noopener noreferrer" aria-label="AESPA Instagram">
+                    <i class="bx bxl-instagram-alt"></i>
+                </a>
+                <a href="https://www.youtube.com/channel/UC9GtSLeksfK4yuJ_g1lgQbg" target="_blank" rel="noopener noreferrer" aria-label="AESPA YouTube">
+                    <i class="bx bxl-youtube"></i>
+                </a>
+            </div>
+            <a href="#albums" class="btn">EXPLORE MORE</a>
+        </div>
+        <div class="profession-container">
+            <div class="profession-box"></div>
+            <div class="overlay"></div>
+        </div>
+    </section>
+
+    <!-- ==================== ALBUMS ==================== -->
+    <section id="albums">
+        <h2 class="hidden">Albums</h2>
+        <div class="all-albums">
+
+            <!-- Armageddon — 1st Full Album, May 2024 -->
+            <div class="albums hidden">
+                <img src="./img/armageddon.png" alt="Armageddon Album Cover">
+                <div class="album-info">
+                    <h4>Armageddon</h4>
+                    <p class="album-year">1st Full Album · 2024</p>
+                    <audio id="audio1" src="./img/armageddon.mp3"></audio>
+                    <button class="custom-audio-button" onclick="togglePlayPause('audio1')" aria-label="Play/Pause Armageddon">
+                        <img id="audio1-icon" src="./img/play.png" alt="Play">
+                    </button>
+                    <p class="album-price">₱2,799</p>
+                    <div class="cart-buttons">
+                        <button class="btn add-to-cart-button" onclick="addToCart('album1')">Add to Cart</button>
+                        <button class="btn btn-remove remove-from-cart-button" onclick="removeFromCart('album1')" style="display:none;">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Whiplash — 5th Mini Album, Oct 2024 -->
+            <div class="albums hidden">
+                <div class="album-placeholder" aria-label="Whiplash album placeholder">
+                    <i class="bx bx-music"></i>
+                    <span>WHIPLASH</span>
+                </div>
+                <div class="album-info">
+                    <h4>Whiplash</h4>
+                    <p class="album-year">5th Mini Album · 2024</p>
+                    <audio id="audio7" src="./img/armageddon.mp3"></audio>
+                    <button class="custom-audio-button" onclick="togglePlayPause('audio7')" aria-label="Play/Pause Whiplash">
+                        <img id="audio7-icon" src="./img/play.png" alt="Play">
+                    </button>
+                    <p class="album-price">₱1,499</p>
+                    <div class="cart-buttons">
+                        <button class="btn add-to-cart-button" onclick="addToCart('album7')">Add to Cart</button>
+                        <button class="btn btn-remove remove-from-cart-button" onclick="removeFromCart('album7')" style="display:none;">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drama — 4th Mini Album, Nov 2023 -->
+            <div class="albums hidden">
+                <img src="./img/dramaAlbum.jpg" alt="Drama Album Cover">
+                <div class="album-info">
+                    <h4>Drama</h4>
+                    <p class="album-year">4th Mini Album · 2023</p>
+                    <audio id="audio2" src="./img/drama.m4a"></audio>
+                    <button class="custom-audio-button" onclick="togglePlayPause('audio2')" aria-label="Play/Pause Drama">
+                        <img id="audio2-icon" src="./img/play.png" alt="Play">
+                    </button>
+                    <p class="album-price">₱1,199</p>
+                    <div class="cart-buttons">
+                        <button class="btn add-to-cart-button" onclick="addToCart('album2')">Add to Cart</button>
+                        <button class="btn btn-remove remove-from-cart-button" onclick="removeFromCart('album2')" style="display:none;">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My World — 3rd Mini Album, May 2023 -->
+            <div class="albums hidden">
+                <img src="./img/myworldAlbum.jpeg" alt="My World Album Cover">
+                <div class="album-info">
+                    <h4>My World</h4>
+                    <p class="album-year">3rd Mini Album · 2023</p>
+                    <audio id="audio3" src="./img/spicy.m4a"></audio>
+                    <button class="custom-audio-button" onclick="togglePlayPause('audio3')" aria-label="Play/Pause My World">
+                        <img id="audio3-icon" src="./img/play.png" alt="Play">
+                    </button>
+                    <p class="album-price">₱1,299</p>
+                    <div class="cart-buttons">
+                        <button class="btn add-to-cart-button" onclick="addToCart('album3')">Add to Cart</button>
+                        <button class="btn btn-remove remove-from-cart-button" onclick="removeFromCart('album3')" style="display:none;">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Girls — 2nd Mini Album, Jul 2022 -->
+            <div class="albums hidden">
+                <img src="./img/girlsAlbum.jpg" alt="Girls Album Cover">
+                <div class="album-info">
+                    <h4>Girls</h4>
+                    <p class="album-year">2nd Mini Album · 2022</p>
+                    <audio id="audio6" src="./img/girls.mp3"></audio>
+                    <button class="custom-audio-button" onclick="togglePlayPause('audio6')" aria-label="Play/Pause Girls">
+                        <img id="audio6-icon" src="./img/play.png" alt="Play">
+                    </button>
+                    <p class="album-price">₱1,299</p>
+                    <div class="cart-buttons">
+                        <button class="btn add-to-cart-button" onclick="addToCart('album6')">Add to Cart</button>
+                        <button class="btn btn-remove remove-from-cart-button" onclick="removeFromCart('album6')" style="display:none;">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savage — 1st Mini Album, Oct 2021 -->
+            <div class="albums hidden">
+                <img src="./img/savageAlbum.png" alt="Savage Album Cover">
+                <div class="album-info">
+                    <h4>Savage</h4>
+                    <p class="album-year">1st Mini Album · 2021</p>
+                    <audio id="audio4" src="./img/savage.mp3"></audio>
+                    <button class="custom-audio-button" onclick="togglePlayPause('audio4')" aria-label="Play/Pause Savage">
+                        <img id="audio4-icon" src="./img/play.png" alt="Play">
+                    </button>
+                    <p class="album-price">₱1,299</p>
+                    <div class="cart-buttons">
+                        <button class="btn add-to-cart-button" onclick="addToCart('album4')">Add to Cart</button>
+                        <button class="btn btn-remove remove-from-cart-button" onclick="removeFromCart('album4')" style="display:none;">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Level — Single, May 2021 -->
+            <div class="albums hidden">
+                <img src="./img/nextlevelAlbum.jpg" alt="Next Level Album Cover">
+                <div class="album-info">
+                    <h4>Next Level</h4>
+                    <p class="album-year">Single · 2021</p>
+                    <audio id="audio5" src="./img/nextlevel.mp3"></audio>
+                    <button class="custom-audio-button" onclick="togglePlayPause('audio5')" aria-label="Play/Pause Next Level">
+                        <img id="audio5-icon" src="./img/play.png" alt="Play">
+                    </button>
+                    <p class="album-price">₱1,299</p>
+                    <div class="cart-buttons">
+                        <button class="btn add-to-cart-button" onclick="addToCart('album5')">Add to Cart</button>
+                        <button class="btn btn-remove remove-from-cart-button" onclick="removeFromCart('album5')" style="display:none;">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Supernova — Single, May 2024 -->
+            <div class="albums hidden">
+                <img src="./img/supernovaMV.jpg" alt="Supernova">
+                <div class="album-info">
+                    <h4>Supernova</h4>
+                    <p class="album-year">Single · 2024</p>
+                    <audio id="audio8" src="./img/supernova.mp3"></audio>
+                    <button class="custom-audio-button" onclick="togglePlayPause('audio8')" aria-label="Play/Pause Supernova">
+                        <img id="audio8-icon" src="./img/play.png" alt="Play">
+                    </button>
+                    <p class="album-price">₱999</p>
+                    <div class="cart-buttons">
+                        <button class="btn add-to-cart-button" onclick="addToCart('album8')">Add to Cart</button>
+                        <button class="btn btn-remove remove-from-cart-button" onclick="removeFromCart('album8')" style="display:none;">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== ABOUT ==================== -->
+    <section id="about" class="hidden">
+        <div class="about-content">
+            <div class="glitch-container">
+                <h2 class="glitch-text">We are <span>AESPA</span></h2>
+                <h2 class="glitch-text">Black Mamba is here!</h2>
+                <h2 class="glitch-text">Save the <span>KWANGYA!!!</span></h2>
+            </div>
+            <p>
+                <b>AESPA is a South Korean girl group formed by SM Entertainment.
+                The group consists of four members: Karina, Giselle, Winter, and Ningning.</b>
+            </p>
+            <p>
+                Each member has a corresponding virtual avatar, or "æ", who exists in the virtual world
+                and interacts with the real-world members. This concept is part of SM Entertainment's
+                larger SM Culture Universe (SMCU).
+            </p>
+            <p>
+                <b>AESPA debuted in November 2020 with their single "Black Mamba"</b> and has since gained
+                international recognition. In 2024, they released their first full studio album
+                <em>Armageddon</em> and their 5th mini album <em>Whiplash</em>, solidifying their
+                status as one of K-Pop's most innovative acts.
+            </p>
+            <div class="about-pics">
+                <div class="about-pic hidden">
+                    <img src="./img/karinaAbout.png" alt="Karina">
+                    <p class="member-name">Karina</p>
+                </div>
+                <div class="about-pic hidden">
+                    <img src="./img/ningningAbout.png" alt="Ningning">
+                    <p class="member-name">Ningning</p>
+                </div>
+                <div class="about-pic hidden">
+                    <img src="./img/winterAbout.png" alt="Winter">
+                    <p class="member-name">Winter</p>
+                </div>
+                <div class="about-pic hidden">
+                    <img src="./img/giselleAbout.png" alt="Giselle">
+                    <p class="member-name">Giselle</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== GALLERY ==================== -->
+    <section id="gallery" class="hidden">
+        <div class="gallery-container">
+            <div class="slide">
+                <div class="item" style="background-image: url(./img/blackmambaMV.jpg);">
+                    <div class="gallery-content">
+                        <div class="name">Black Mamba</div>
+                        <div class="des">The group battles a menacing digital entity within a vibrant, surreal world, combining intense visuals and dynamic choreography.</div>
+                        <a href="https://www.youtube.com/watch?v=ZeerrnuLi5E" target="_blank" rel="noopener noreferrer"><button>Watch More</button></a>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url(./img/savageMV3.jpg);">
+                    <div class="gallery-content">
+                        <div class="name">Savage</div>
+                        <div class="des">The group navigates a futuristic, cyberpunk world battling AI adversaries, blending sleek visuals with powerful choreography.</div>
+                        <a href="https://www.youtube.com/watch?v=WPdWvnAAurg" target="_blank" rel="noopener noreferrer"><button>Watch More</button></a>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url(./img/girlsMV.jpg);">
+                    <div class="gallery-content">
+                        <div class="name">Girls</div>
+                        <div class="des">The group embarks on a dynamic adventure through vivid, virtual landscapes, showcasing their strength and unity with fierce choreography.</div>
+                        <a href="https://www.youtube.com/watch?v=dYRITmpFbJ4" target="_blank" rel="noopener noreferrer"><button>Watch More</button></a>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url(./img/dramaMV.jpg);">
+                    <div class="gallery-content">
+                        <div class="name">Drama</div>
+                        <div class="des">The group explores a dreamlike, cinematic universe filled with intricate set designs and emotive performances blending fantasy and reality.</div>
+                        <a href="https://www.youtube.com/watch?v=D8VEhcPeSlc" target="_blank" rel="noopener noreferrer"><button>Watch More</button></a>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url(./img/supernovaMV.jpg);">
+                    <div class="gallery-content">
+                        <div class="name">Supernova</div>
+                        <div class="des">The group journeys through an ethereal, cosmic realm, combining stunning visual effects with mesmerizing choreography to create an otherworldly experience.</div>
+                        <a href="https://www.youtube.com/watch?v=phuiiNCxRMg" target="_blank" rel="noopener noreferrer"><button>Watch More</button></a>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url(./img/armageddonMV.jpg);">
+                    <div class="gallery-content">
+                        <div class="name">Armageddon</div>
+                        <div class="des">The group confronts a post-apocalyptic world with intense, dramatic visuals and powerful performances, creating a thrilling narrative of survival and resilience.</div>
+                        <a href="https://www.youtube.com/watch?v=nFYwcndNuOY" target="_blank" rel="noopener noreferrer"><button>Watch More</button></a>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url(./img/nextlevelMV.jpg);">
+                    <div class="gallery-content">
+                        <div class="name">Next Level</div>
+                        <div class="des">The group ventures through an interdimensional realm, merging striking visuals with bold choreography and a futuristic aesthetic.</div>
+                        <a href="https://www.youtube.com/watch?v=4TWR90KJl84" target="_blank" rel="noopener noreferrer"><button>Watch More</button></a>
+                    </div>
+                </div>
+            </div>
+            <div class="button">
+                <button class="prev" aria-label="Previous"><i class="fa-solid fa-arrow-left"></i></button>
+                <button class="next" aria-label="Next"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACT ==================== -->
+    <section id="contact">
+        <!-- Core Members Swiper -->
+        <div class="testimonial-container hidden">
+            <h2 class="heading">Core Members</h2>
+            <div class="testimonial-wrapper">
+                <div class="testimonial-box mySwiper">
+                    <div class="testimonial-content swiper-wrapper">
+                        <div class="testimonial-slide swiper-slide">
+                            <img src="./img/radyn.jpg" alt="Radyn Ryu Maloles">
+                            <h3>Radyn Ryu Maloles</h3>
+                            <p>With a passion for crafting visual stories, I immerse myself in the art of editing videos and photos, weaving narratives through meticulous cuts and creative enhancements. When not behind the screen, I indulge in the captivating worlds of cinema and series, finding inspiration in diverse narratives and cinematic techniques. My pursuit of Information Technology reflects my desire to merge creativity with technical expertise, forging a path where innovation meets imagination.</p>
+                        </div>
+                        <div class="testimonial-slide swiper-slide">
+                            <img src="./img/marc.jpg" alt="Marc Justin Alcantara">
+                            <h3>Marc Justin Alcantara</h3>
+                            <p>He is an IT student passionate about exploring the latest in technology and coding. When he's not immersed in his studies, he enjoys binge-watching Netflix series. His curiosity for tech and love for entertainment fuel his creativity and problem-solving skills.</p>
+                        </div>
+                        <div class="testimonial-slide swiper-slide">
+                            <img src="./img/joy.jpg" alt="April Joy Franco">
+                            <h3>April Joy Franco</h3>
+                            <p>I am a college student majoring in Information Technology, with a passion for technology and continuous learning. I enjoy watching diverse media, reading various genres, and writing to express my ideas. Exploring new topics on the internet fuels my curiosity and keeps me updated with the latest tech advancements.</p>
+                        </div>
+                        <div class="testimonial-slide swiper-slide">
+                            <img src="./img/sean.jpg" alt="Sean Patrick Jamolin">
+                            <h3>Sean Patrick Jamolin</h3>
+                            <p>I am an IT student at Cabuyao University, and I want to explore more about coding and learn new things in IT. I enjoy watching movies and playing online games.</p>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form hidden">
+            <h2>Contact Us</h2>
+            <div id="contact-success" class="success-banner" style="display:none;" role="alert">
+                <i class="bx bx-check-circle"></i>
+                <p>Message sent! We'll get back to you soon.</p>
+            </div>
+            <form id="contact-form-el" novalidate>
+                <input type="text" id="contact-name" placeholder="Your Name" required aria-label="Your Name">
+                <input type="email" id="contact-email" placeholder="Your Email" required aria-label="Your Email">
+                <textarea id="contact-message" placeholder="Your Message" rows="5" required aria-label="Your Message"></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="footer-text">
+            <p>AesMERCH &copy; 2026 | All Rights Reserved.</p>
+        </div>
+        <div class="footer-iconTop">
+            <a href="#home" aria-label="Back to top"><i class="bx bx-up-arrow-alt"></i></a>
+        </div>
+    </footer>
+
+    <!-- ==================== CART MODAL ==================== -->
+    <div id="cart-modal" class="modal" role="dialog" aria-labelledby="cart-modal-title" aria-modal="true">
+        <div class="modal-content">
+            <button class="close-button" id="close-cart-button" aria-label="Close shopping cart">&times;</button>
+            <h2 id="cart-modal-title"><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+            <div id="cart-items">
+                <p class="cart-empty-msg">Your cart is currently empty.</p>
+            </div>
+            <div class="form-section">
+                <h3>Order Form</h3>
+                <form id="order-form" novalidate>
+                    <div class="form-group">
+                        <label for="buyer-name">Full Name</label>
+                        <input type="text" id="buyer-name" name="full-name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-number">Contact Number</label>
+                        <input type="tel" id="contact-number" name="contact-number" placeholder="+63 9XX XXX XXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Delivery Address</label>
+                        <textarea id="address" name="address" rows="3" placeholder="Enter your full delivery address" required></textarea>
+                    </div>
+                    <div class="form-group total-group">
+                        <label>Total Price</label>
+                        <span id="total-price" class="total-display">₱0</span>
+                    </div>
+                    <div id="order-success" class="success-banner" style="display:none;" role="alert">
+                        <i class="bx bx-check-circle"></i>
+                        <p>Order placed! Thank you, <strong id="order-buyer-name"></strong>! We'll process your order shortly.</p>
+                    </div>
+                    <button type="submit" class="btn order-btn">
+                        <i class="bx bx-package"></i> Place Order
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <script>
+    // ============================================================
+    // ALBUM CATALOG (as of August 2026)
+    // ============================================================
+    const albumDetails = {
+        album1: { title: 'Armageddon',  price: 2799, year: '2024' },
+        album2: { title: 'Drama',       price: 1199, year: '2023' },
+        album3: { title: 'My World',    price: 1299, year: '2023' },
+        album4: { title: 'Savage',      price: 1299, year: '2021' },
+        album5: { title: 'Next Level',  price: 1299, year: '2021' },
+        album6: { title: 'Girls',       price: 1299, year: '2022' },
+        album7: { title: 'Whiplash',    price: 1499, year: '2024' },
+        album8: { title: 'Supernova',   price: 999,  year: '2024' },
+    };
+
+    // ============================================================
+    // CART STATE — persisted via localStorage
+    // ============================================================
+    let cart = JSON.parse(localStorage.getItem('aesmerch_cart') || '{}');
+    Object.keys(albumDetails).forEach(id => { if (!(id in cart)) cart[id] = 0; });
+
+    function saveCart() {
+        localStorage.setItem('aesmerch_cart', JSON.stringify(cart));
+    }
+
+    // ============================================================
+    // AUDIO PLAYER
+    // ============================================================
+    let currentAudio = null;
+
+    function togglePlayPause(audioId) {
+        const audio = document.getElementById(audioId);
+        const icon  = document.getElementById(`${audioId}-icon`);
+        if (!audio || !icon) return;
+
+        if (audio === currentAudio && !audio.paused) {
+            audio.pause();
+            icon.src = './img/play.png';
+            currentAudio = null;
+        } else {
+            if (currentAudio) {
+                currentAudio.pause();
+                const prevIcon = document.getElementById(`${currentAudio.id}-icon`);
+                if (prevIcon) prevIcon.src = './img/play.png';
+            }
+            audio.play().catch(() => {});
+            icon.src = './img/pause.png';
+            currentAudio = audio;
+        }
+    }
+
+    // ============================================================
+    // TOAST NOTIFICATION
+    // ============================================================
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ============================================================
+    // CART FUNCTIONS
+    // ============================================================
+    function addToCart(albumId) {
+        cart[albumId]++;
+        saveCart();
+        updateCartCount();
+        updateCartItems();
+        const addBtn    = document.querySelector(`.add-to-cart-button[onclick="addToCart('${albumId}')"]`);
+        const removeBtn = document.querySelector(`.remove-from-cart-button[onclick="removeFromCart('${albumId}')"]`);
+        if (addBtn)    { addBtn.innerHTML = '<i class="bx bx-check"></i> Added'; addBtn.disabled = true; }
+        if (removeBtn) removeBtn.style.display = 'inline-block';
+        showToast(`🎵 ${albumDetails[albumId].title} added to cart!`);
+    }
+
+    function removeFromCart(albumId) {
+        if (cart[albumId] <= 0) return;
+        cart[albumId]--;
+        saveCart();
+        updateCartCount();
+        updateCartItems();
+        const addBtn    = document.querySelector(`.add-to-cart-button[onclick="addToCart('${albumId}')"]`);
+        const removeBtn = document.querySelector(`.remove-from-cart-button[onclick="removeFromCart('${albumId}')"]`);
+        if (cart[albumId] === 0) {
+            if (addBtn)    { addBtn.innerHTML = 'Add to Cart'; addBtn.disabled = false; }
+            if (removeBtn) removeBtn.style.display = 'none';
+        }
+        showToast(`${albumDetails[albumId].title} removed from cart.`);
+    }
+
+    function incrementQuantity(albumId) {
+        cart[albumId]++;
+        saveCart();
+        updateCartCount();
+        updateCartItems();
+    }
+
+    function decrementQuantity(albumId) {
+        if (cart[albumId] > 1) {
+            cart[albumId]--;
+            saveCart();
+            updateCartCount();
+            updateCartItems();
+        } else {
+            removeFromCart(albumId);
+        }
+    }
+
+    function updateCartCount() {
+        const total = Object.values(cart).reduce((s, q) => s + q, 0);
+        document.getElementById('cart-count').textContent = total;
+    }
+
+    function calculateTotalPrice() {
+        return Object.keys(cart).reduce((t, id) => t + cart[id] * albumDetails[id].price, 0);
+    }
+
+    function updateCartItems() {
+        const el       = document.getElementById('cart-items');
+        const hasItems = Object.values(cart).some(q => q > 0);
+
+        if (!hasItems) {
+            el.innerHTML = '<p class="cart-empty-msg">Your cart is currently empty.</p>';
+            document.getElementById('total-price').textContent = '₱0';
+            return;
+        }
+
+        let html = '';
+        Object.keys(cart).forEach(albumId => {
+            if (cart[albumId] > 0) {
+                const { title, price } = albumDetails[albumId];
+                const subtotal = (cart[albumId] * price).toLocaleString('en-PH');
+                html += `
+                <div class="cart-item">
+                    <span class="item-title">${title}</span>
+                    <div class="item-controls">
+                        <button onclick="decrementQuantity('${albumId}')" aria-label="Decrease quantity">&#8722;</button>
+                        <span class="item-quantity">${cart[albumId]}</span>
+                        <button onclick="incrementQuantity('${albumId}')" aria-label="Increase quantity">&#43;</button>
+                    </div>
+                    <span class="item-price">&#8369;${subtotal}</span>
+                </div>`;
+            }
+        });
+        el.innerHTML = html;
+        document.getElementById('total-price').textContent = `₱${calculateTotalPrice().toLocaleString('en-PH')}`;
+    }
+
+    // ============================================================
+    // CART MODAL EVENTS
+    // ============================================================
+    document.getElementById('cart-button').addEventListener('click', () => {
+        document.getElementById('cart-modal').style.display = 'flex';
+        document.getElementById('order-success').style.display = 'none';
+        updateCartItems();
+    });
+
+    document.getElementById('close-cart-button').addEventListener('click', () => {
+        document.getElementById('cart-modal').style.display = 'none';
+    });
+
+    window.addEventListener('click', e => {
+        const modal = document.getElementById('cart-modal');
+        if (e.target === modal) modal.style.display = 'none';
+    });
+
+    // ============================================================
+    // ORDER FORM SUBMISSION
+    // ============================================================
+    document.getElementById('order-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!Object.values(cart).some(q => q > 0)) {
+            showToast('Your cart is empty! Add albums before ordering.');
+            return;
+        }
+        const buyerName = document.getElementById('buyer-name').value.trim();
+        if (!buyerName) return;
+
+        document.getElementById('order-buyer-name').textContent = buyerName;
+        document.getElementById('order-success').style.display = 'flex';
+
+        // Clear cart after successful order
+        Object.keys(cart).forEach(id => cart[id] = 0);
+        saveCart();
+        updateCartCount();
+        updateCartItems();
+        this.reset();
+
+        document.querySelectorAll('.add-to-cart-button').forEach(btn => {
+            btn.innerHTML = 'Add to Cart';
+            btn.disabled = false;
+        });
+        document.querySelectorAll('.remove-from-cart-button').forEach(btn => {
+            btn.style.display = 'none';
+        });
+
+        setTimeout(() => {
+            document.getElementById('order-success').style.display = 'none';
+        }, 6000);
+    });
+
+    // ============================================================
+    // CONTACT FORM SUBMISSION
+    // ============================================================
+    document.getElementById('contact-form-el').addEventListener('submit', function(e) {
+        e.preventDefault();
+        document.getElementById('contact-success').style.display = 'flex';
+        this.reset();
+        setTimeout(() => {
+            document.getElementById('contact-success').style.display = 'none';
+        }, 4500);
+    });
+
+    // ============================================================
+    // GLITCH TEXT ROTATOR (fixed)
+    // ============================================================
+    const glitchTexts = document.querySelectorAll('.glitch-text');
+    let glitchIndex = 0;
+
+    function rotateGlitch() {
+        glitchTexts.forEach(t => t.style.display = 'none');
+        glitchTexts[glitchIndex].style.display = 'block';
+        glitchIndex = (glitchIndex + 1) % glitchTexts.length;
+    }
+    if (glitchTexts.length) rotateGlitch();
+    setInterval(rotateGlitch, 2500);
+
+    // ============================================================
+    // INTERSECTION OBSERVER — scroll reveal
+    // ============================================================
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            entry.target.classList.toggle('show', entry.isIntersecting);
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.hidden').forEach(el => revealObserver.observe(el));
+
+    // ============================================================
+    // RESTORE CART BUTTON STATE ON LOAD
+    // ============================================================
+    updateCartCount();
+    Object.keys(cart).forEach(albumId => {
+        if (cart[albumId] > 0) {
+            const addBtn    = document.querySelector(`.add-to-cart-button[onclick="addToCart('${albumId}')"]`);
+            const removeBtn = document.querySelector(`.remove-from-cart-button[onclick="removeFromCart('${albumId}')"]`);
+            if (addBtn)    { addBtn.innerHTML = '<i class="bx bx-check"></i> Added'; addBtn.disabled = true; }
+            if (removeBtn) removeBtn.style.display = 'inline-block';
+        }
+    });
+    </script>
+
+    <script src="./script.js"></script>
+    <script src="./app.js"></script>
+
+</body>
+</html>

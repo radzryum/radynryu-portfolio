@@ -1,0 +1,747 @@
+================================================================================
+                        CyMon  —  PROGRAM LISTING
+   Web-Based Information System for the Special Education Program of
+   ClearMind Psychological Services (CMPS), Philippines
+================================================================================
+ Document : Program Listing (Appendix)        Version : 1.0
+ Repo     : cymon | frontend/ (React 19 + Vite 8) | backend/ (Express 5)
+ Database : Supabase (PostgreSQL 15 + Auth + Row-Level Security)
+ Purpose  : Listing of the principal system features and the important source
+            code that implements them.
+ Format   : Monospaced 9pt, ~72 lines per page  ->  approx. 10 pages.
+ Note     : Every listing is an excerpt of the cited source file; the complete
+            implementation lives in the repository at the stated path/line.
+
+TABLE OF CONTENTS
+  PART A — System Overview and Architecture ............................ 1
+  PART B — Feature Listings
+    B-1  Authentication, Session and Token Verification ................ 1
+    B-2  Account-Number Login (student / employee identifier) .......... 1
+    B-3  Role-Based Authorization and Multi-Role Routing ............... 2
+    B-4  Row-Level Security (Postgres policy layer) ................... 2
+    B-5  Caregiver Daily Journal with Clinician Lock .................. 3
+    B-6  Assessment Engine, Completeness and Auto-Scoring ............. 3
+    B-7  Report Lifecycle: Draft > Review > Approve / Revise .......... 4
+    B-8  Assessment Document Release Workflow .......................... 4
+    B-9  Official PDF Generation Engine ................................ 6
+    B-10 E-mail Delivery and In-App Notifications ..................... 6
+    B-11 Audit Trail .................................................. 7
+    B-12 Appointment Scheduling and Cron Reminder Job ................. 7
+    B-13 Compliance and Waiver Management (FO-02 / FO-12) ............. 8
+    B-14 Attendance and Monthly Session Records (FO-11) ................ 8
+    B-15 UI Design System: Tokens and Primitives ...................... 9
+    B-16 Digital Signature Capture ..................................... 9
+  PART C — Database Schema Reference ..................................... 9
+  PART D — Configuration, Deployment and CI ........................... 10
+================================================================================
+PART A — SYSTEM OVERVIEW AND ARCHITECTURE
+================================================================================
+A.1  Architectural Pattern
+--------------------------------------------------------------------------------
+Decoupled three-tier architecture: a single-page application for presentation,
+a stateless JSON API for application logic, and a managed PostgreSQL instance
+whose access is governed entirely by Row-Level Security.
+
+    +---------------------------+         +-----------------------------+
+    |  PRESENTATION TIER        |         |  APPLICATION TIER           |
+    |  React 19 SPA (Vite 8)    |  HTTPS  |  Express 5 (Node.js)       |
+    |  :5173  Tailwind CSS v4   | ------> |  :4000  /api/*             |
+    |  30 UI primitives         |   JSON  |  routers > middleware >    |
+    +---------------------------+         |  services (lib/)            |
+             ^                            +-------------+---------------+
+             |  Bearer access token                      | service-role key
+             +-----------------------------+  +-----------+--------------+
+                                         |  DATA TIER               |
+                                         |  Supabase PostgreSQL     |
+                                         |  + Auth (GoTrue)         |
+                                         |  + Row-Level Security    |
+                                         +--------------------------+
+
+In development the Vite dev server proxies /api/* to the backend, so the browser
+only issues same-origin requests (frontend/vite.config.js):
+
+    server: { proxy: { '/api': { target: 'http://localhost:4000',
+                                 changeOrigin: true } } }
+
+A.2  Technology Stack
+--------------------------------------------------------------------------------
+  Client UI   React 19.2, React Router 7, Vite 8, Tailwind CSS v4, lucide-react
+  Client Auth @supabase/supabase-js (anon key, persistSession: true)
+  API Server  Node.js, Express 5, cors, dotenv
+  PDF Engine  pdf-lib (PDFDocument, StandardFonts, PNG signature embedding)
+  Services    Resend (transactional e-mail), Vercel Cron (reminders)
+  Data        Supabase PostgreSQL 15, 73 forward-only SQL migrations
+  Test / CI   Playwright (9 e2e specs), GitHub Actions, Vercel deploy
+
+A.3  Roles and Portals
+--------------------------------------------------------------------------------
+The enum `user_role` carries six values. A staff member may hold more than one
+role at a time (profiles.extra_roles), so the interface shows an acting-role
+switcher and re-scopes navigation without re-authenticating.
+
+  client                  /client            Caregiver: journal, waivers,
+                                             releases, appointments
+  psychologist            /psychologist      Approval and clinical sign-off
+  psychometrician         /psychometrician   Administration, report drafting
+  speech_therapist        /psychometrician   Shares the psychometrician portal
+  occupational_therapist  /psychometrician   Shares the psychometrician portal
+  admin                   /admin             Clinic administration, records
+
+A.4  Repository Layout
+--------------------------------------------------------------------------------
+  frontend/  src/App.jsx (153 ln, router) | src/index.css (771 ln, @theme
+             tokens) | src/auth/ (AuthProvider, RequireAuth) | src/components/
+             ui/ (30 primitives) | src/lib/api.js (291 ln) | src/pages/ (45)
+  backend/   app.js (158 ln) | api/index.js (serverless) | middleware/
+             requireAuth.js (70 ln) | routes/ (6 routers, 122 endpoints) |
+             lib/ (12 services) | supabase/migrations/ (73 SQL files)
+  docs/      designs/ | forms-pdf/ | backlog.md | blockers.md
+
+================================================================================
+PART B — FEATURE LISTINGS
+================================================================================
+------------------------------------------------------------------------------
+B-1  AUTHENTICATION, SESSION AND TOKEN VERIFICATION
+------------------------------------------------------------------------------
+Description : Every protected endpoint runs behind one shared middleware that
+               validates the Supabase access token and rejects deactivated accounts.
+Source      : backend/middleware/requireAuth.js (1-70)
+
+    async function requireAuth(req, res, next) {
+      const header = req.headers.authorization || '';
+      const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+      if (!token) return res.status(401).json({ error: 'Missing bearer token' });
+      const { data, error } = await supabase.auth.getUser(token);
+      if (error || !data.user) {
+        return res.status(401).json({ error: 'Invalid or expired token' });
+      }
+      // Progressive column fallback so the API survives a partially applied
+      // migration set (extra_roles / onboarding columns may not exist yet).
+      const { data: profile } = await supabase.from('profiles')
+        .select('id, role, extra_roles, clinic_id, deleted_at, display_name')
+        .eq('id', data.user.id).single();
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-2  ACCOUNT-NUMBER LOGIN (STUDENT / EMPLOYEE IDENTIFIER)
+------------------------------------------------------------------------------
+Description : Caregivers and staff may sign in with a clinic-issued account number
+               instead of an e-mail address; it is resolved server-side to the
+               e-mail registered with Supabase Auth.
+Source      : backend/routes/auth.js (111-170)
+
+    router.post('/login', async (req, res, next) => {
+      const { email, password } = req.body || {};
+      let loginEmail = email;
+      if (!email.includes('@')) {
+        const lookupId = email.trim().toUpperCase();
+        // Try resolving as student/patient ID, then as employee ID.
+        const { data: patientData } = await supabase.from('patients')
+          .select('caregiver_id').eq('patient_id', lookupId).maybeSingle();
+        const { data: p } = patientData?.caregiver_id
+          ? await supabase.from('profiles').select('email')
+              .eq('id', patientData.caregiver_id).maybeSingle()
+          : await supabase.from('profiles').select('email')
+              .eq('employee_id', lookupId).maybeSingle();
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-3  ROLE-BASED AUTHORIZATION AND MULTI-ROLE ROUTING
+------------------------------------------------------------------------------
+Description : The SPA gates every portal on the profile's role set; the backend
+               independently re-checks the role, so a forged route grants nothing.
+Source      : frontend/src/auth/RequireAuth.jsx; frontend/src/lib/roleNav.js
+
+    function RequireAuth({ roles, children }) {
+      const { session, profile, loading } = useAuth()
+      const location = useLocation()
+      if (loading) return <LoadingScreen />
+      if (!session) {
+        return <Navigate to="/login" replace state={{ from: location }} />
+      }
+      if (roles && profile) {
+        const mine = [profile.role, ...(profile.extra_roles || [])]
+        if (!mine.some((r) => roles.includes(r))) {
+          return <Navigate to="/login" replace />
+        }
+      }
+      return children
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-4  ROW-LEVEL SECURITY (POSTGRES POLICY LAYER)
+------------------------------------------------------------------------------
+Description : The data tier enforces access independently of the API. The helpers
+               are SECURITY DEFINER with a pinned search_path, which also breaks
+               the recursion fault that broke every login (migration 0008).
+Source      : backend/supabase/migrations/0007_rls_policies.sql (11-44, 117-161)
+
+    create or replace function public.current_role()
+    returns user_role language sql stable as $$
+      select role from public.profiles where id = auth.uid() $$;
+    create or replace function public.owns_patient(p_patient uuid)
+    returns boolean language sql stable as $$
+      select exists ( select 1 from public.patients p
+        where p.id = p_patient and p.caregiver_id = auth.uid() ) $$;
+    -- caregivers read only their own child; administrators read their clinic
+    create policy patients_caregiver_select on public.patients
+      for select to authenticated using (caregiver_id = auth.uid());
+    create policy patients_admin_all on public.patients
+      for all to authenticated
+      using (public.is_admin() and clinic_id = public.current_clinic())
+      with check (public.is_admin() and clinic_id = public.current_clinic());
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-5  CAREGIVER DAILY JOURNAL WITH CLINICIAN LOCK
+------------------------------------------------------------------------------
+Description : The Daily Journal records mood, task completion, behavioural episodes,
+               sleep, appetite and observations once per day. Writes are blocked at
+               the database level until the psychometrician grants permission.
+Source      : backend/routes/client.js (467-517); migration 0046
+
+    router.post('/activity-logs', requireAuth, requireClient, async (req, res, next) => {
+      const patient = await requirePatient(req, res);
+      if (!patient) return;
+      if (!patient.allow_journal_entry) {
+        return res.status(403).json({ error: 'Journal entries for this student are
+          locked. Permission from your supervising Psychometrician is required.' });
+      }
+      const { mood, task_completion, behavioral_episodes, sleep_quality,
+              appetite, observations, log_date } = req.body || {};
+      if (!mood) return res.status(400).json({ error: 'Mood is required' });
+      const targetLogDate = log_date || clinicTodayKey();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(targetLogDate)) {
+        return res.status(400).json({ error: 'Journal date must use YYYY-MM-DD.' });
+      }
+      if (targetLogDate > clinicTodayKey()) {
+        return res.status(400).json({ error: 'A Daily Journal entry cannot use a
+          future date.' });
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-6  ASSESSMENT ENGINE, COMPLETENESS AND AUTO-SCORING
+------------------------------------------------------------------------------
+Description : Assessments are data-driven. A template holds a JSON "structure" of
+               domains and items; that one structure drives the on-screen form,
+               completeness validation and the automatic score.
+Source      : backend/lib/assessmentSchemas.js (60-104); migration 0009
+
+    function structureForTemplate(template = {}) {
+      return isFo05Template(template) ? FO05_STRUCTURE : template.structure || [];
+    }
+    function responseValue(answers, key) {
+      const item = answers?.[key];
+      if (item && typeof item === 'object') {
+        return item.response ?? item.value ?? item.answer ?? '';
+      }
+      return item ?? '';
+    }
+    function isAssessmentResponseComplete(item = {}, value) {
+      const n = String(value ?? '').trim().toLowerCase();
+      if (item.response_type === 'text') return Boolean(n);
+      if (item.response_type === 'select') {
+        return (item.options || []).some((o) => String(o).toLowerCase() === n);
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-7  REPORT LIFECYCLE: DRAFT > REVIEW > APPROVE / REVISE
+------------------------------------------------------------------------------
+Description : A psychometrician prepares and signs a report and routes it for
+               psychologist review. The psychologist either approves and signs it
+               — releasing it to the caregiver — or returns it with a comment.
+Source      : backend/routes/psychometrician.js (1471); psychologist.js (1066)
+
+    // psychometrician: prepare, sign and route for review
+    router.patch('/reports/:id', async (req, res, next) => {
+      const { status, completeness, prepared_signature_image } = req.body || {};
+      const { data: rep } = await supabase.from('assessment_reports')
+        .select('id, status, patients(clinic_id)').eq('id', req.params.id).maybeSingle();
+      if (!rep || rep.patients.clinic_id !== req.profile.clinic_id) {
+        return res.status(404).json({ error: 'Report not found' });
+      }
+      if (rep.status && !['draft','in_progress','revalidation','revise_requested']
+                         .includes(rep.status)) {
+        return res.status(409).json({ error: 'This report is no longer editable.' });
+      }
+      const upd = { prepared_by_id: req.profile.id };
+      if (status !== undefined) {
+        if (!['draft','in_progress','ready_for_review'].includes(status)) {
+          return res.status(400).json({ error: 'A psychometrician can only set
+            draft, in_progress, or ready_for_review' });
+        }
+        upd.status = status;
+      }
+      await supabase.from('assessment_reports').update(upd).eq('id', req.params.id);
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-8  ASSESSMENT DOCUMENT RELEASE WORKFLOW  (FLAGSHIP FEATURE)
+------------------------------------------------------------------------------
+Description : A caregiver selects up to ten completed assessment documents and
+               requests their release. An administrator schedules a clinic pick-up
+               window, assigns a fee per document, records payment and releases the
+               documents. Every stage notifies the counterpart and writes an audit.
+Source      : backend/routes/client.js (969); admin.js (3164, 3336); migration 0068
+
+  B-8.1  Caregiver submits the request  (backend/routes/client.js)
+
+    router.post('/assessments/document-release-requests',
+                requireAuth, requireClient, async (req, res, next) => {
+      const patient = await requirePatient(req, res);
+      if (!patient) return;
+      // De-duplicate and validate the requested bundle (1..10 items).
+      const uniqueItems = [...new Map(requestedItems
+        .filter((i) => SOURCE_TABLES.has(i?.source_table) && i?.record_id)
+        .map((i) => [sourceKey(i.source_table, i.record_id), i])).values()];
+      if (!uniqueItems.length || uniqueItems.length > 10) {
+        return res.status(400).json({ error: 'Select between one and ten completed
+          assessment documents.' });
+      }
+      // Only scored / approved / finalized records are releasable; a behavioral
+      // report is the only report type a caregiver may obtain.
+      (submissions || []).forEach((s) => {
+        if (!RELEASE_APPROVED_ASSESSMENT_STATUSES.has(s.status)) return;
+        available.set(sourceKey('assessment_submissions', s.id), {
+          source_table: 'assessment_submissions', source_id: s.id,
+          patient_id: patient.id, template_id: s.template_id,
+          title: template.title || 'Completed Assessment',
+          completed_at: s.submitted_at || s.created_at, fee: 0 });
+    /* ... excerpt continues in the source file ... */
+  B-8.2  Administrator schedules and prices the release (backend/routes/admin.js)
+
+    router.patch('/assessment-document-releases/:id', async (req, res, next) => {
+      const { status, scheduled_date, scheduled_start_time, scheduled_end_time,
+              location, items: itemPayload, admin_note, declined_reason } = req.body || {};
+      if (!['scheduled', 'declined', 'cancelled'].includes(status)) {
+        return res.status(400).json({ error: 'status must be scheduled, declined,
+          or cancelled' });
+      }
+      const { data: request } = await supabase
+        .from('assessment_document_release_requests')
+        .select('id, clinic_id, patient_id, status, payment_status, patients(...)')
+        .eq('id', req.params.id).eq('clinic_id', req.profile.clinic_id).maybeSingle();
+      if (!request) {
+        return res.status(404).json({ error: 'Document release request not found' });
+      }
+      const isReschedule = request.status === 'scheduled' && status === 'scheduled';
+      if (request.status !== 'pending' && !isReschedule && status !== 'cancelled') {
+        return res.status(409).json({ error: 'Only pending document release requests
+          can be scheduled or declined.' });
+      }
+      if (status === 'scheduled') {
+        // The clinic visit must be today or later, and only on a weekday.
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(String(scheduled_date || ''))) {
+          return res.status(400).json({ error: 'A clinic visit date is required.' });
+    /* ... excerpt continues in the source file ... */
+  B-8.3  The cashier releases the documents  (backend/routes/admin.js)
+
+    router.post('/assessment-document-releases/:id/release', async (req, res, next) => {
+      const paymentMethod = String(req.body?.payment_method || '').toLowerCase();
+      if (!['cash', 'gcash'].includes(paymentMethod)) {
+        return res.status(400).json({ error: 'Choose cash or GCash as the payment
+          method.' });
+      }
+      const { data: request } = await supabase
+        .from('assessment_document_release_requests')
+        .select('id, status, payment_status, patients(...)')
+        .eq('id', req.params.id).eq('clinic_id', req.profile.clinic_id).maybeSingle();
+      if (request.status !== 'scheduled' || request.payment_status === 'paid') {
+        return res.status(409).json({ error: 'Only an unpaid scheduled request can
+          be released.' });
+    /* ... excerpt continues in the source file ... */
+  B-8.4  Release status machine and supporting table (migration 0068)
+
+    pending -> scheduled -> released
+       |           |
+       |           +-> (re-schedule while scheduled)
+       +-> declined
+       +-> cancelled
+    create table if not exists public.assessment_document_release_requests (
+      id uuid primary key default gen_random_uuid(),
+      clinic_id uuid not null references public.clinics(id) on delete cascade,
+      patient_id uuid not null references public.patients(id) on delete cascade,
+      requested_by_id uuid references public.profiles(id) on delete set null,
+      status document_release_request_status not null default 'pending',
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-9  OFFICIAL PDF GENERATION ENGINE
+------------------------------------------------------------------------------
+Description : The server renders the official CMPS forms (FO-01 to FO-11) on top
+               of the clinic's own reference PDFs using pdf-lib. Measured
+               coordinates live in a separate layout table, so a form can be
+               re-typeset without touching the drawing code.
+Source      : backend/lib/formPdf.js (2108-2154); backend/lib/formLayouts.js
+
+    async function renderFormPdf({ code, bundle, submission, report }) {
+      const templatePath = TEMPLATE_PATHS[code];
+      if (!templatePath) {
+        const error = new Error(`No reference PDF is registered for ${code}`);
+        error.status = 422;
+        throw error;
+      }
+      const source = await fs.readFile(templatePath);
+      const pdf = await PDFDocument.load(source);
+      const [font, bold] = await Promise.all([
+        pdf.embedFont(StandardFonts.Helvetica),
+        pdf.embedFont(StandardFonts.HelveticaBold),
+      ]);
+      const fonts = { font, bold };
+      const pages = pdf.getPages();
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-10  E-MAIL DELIVERY AND IN-APP NOTIFICATIONS
+------------------------------------------------------------------------------
+Description : One notification helper covers every workflow. It writes the in-app
+               row and, optionally, sends the matching branded e-mail through
+               Resend. A failure never breaks the primary request.
+Source      : backend/lib/notify.js (1-45); backend/lib/email.js (391-454)
+
+    async function createNotification({ clinicId, recipientId, type = 'system',
+                                        title, body = null, link = null, email = null }) {
+      if (!recipientId || !clinicId || !title) return;
+      const { error } = await supabase.from('notifications').insert({
+        clinic_id: clinicId, recipient_id: recipientId, type, title, body, link });
+      if (error) console.error('[notify] failed to create notification:', error.message);
+      if (!email || error) return;
+      const { data: recipient } = await supabase.from('profiles')
+        .select('email, display_name').eq('id', recipientId).maybeSingle();
+      if (!recipient?.email) return;
+      sendMail({ to: recipient.email, subject: email.subject || title,
+        templateKey: email.templateKey || 'notification',
+        templateData: { recipient_name: recipient.display_name || 'there',
+          notification_title: title, notification_body: body || '',
+          notification_link: link || '', ...(email.templateData || {}) },
+      }).catch((e) => console.error('[email] failed to send notification:', e.message));
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-11  AUDIT TRAIL
+------------------------------------------------------------------------------
+Description : Every clinically significant action is appended to an append-only
+               log with an actor, an entity and a severity level.
+Source      : backend/lib/audit.js (1-40)
+
+    const ALLOWED_SEVERITIES = new Set(['info', 'warn', 'alert']);
+
+    /**
+     * Append a clinic-wide, read-only audit event.
+     *
+     * Audit failures are logged without failing the clinical operation that
+     * already succeeded. Callers should await this helper so the insert is
+     * attempted before a serverless request finishes.
+     */
+    async function writeAudit({ clinicId, actorId = null, action, entityType = null,
+                                entityId = null, summary, severity = 'info' }) {
+      if (!supabaseConfigured || !clinicId || !action || !summary) return false;
+      const { error } = await supabase.from('audit_log').insert({
+        clinic_id: clinicId, actor_id: actorId || null,
+        action: String(action).trim(),
+        entity_type: entityType ? String(entityType).trim() : null,
+        entity_id: entityId || null, summary: String(summary).trim(),
+        severity: ALLOWED_SEVERITIES.has(severity) ? severity : 'info',
+      });
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-12  APPOINTMENT SCHEDULING AND CRON REMINDER JOB
+------------------------------------------------------------------------------
+Description : The admin schedule supports individual and group sessions. A Vercel
+               Cron job fires daily at 00:00 and e-mails the caregiver of every
+               appointment happening within the next 24 hours.
+Source      : backend/app.js (45-139); backend/vercel.json
+
+    app.get('/api/cron/reminders', async (req, res, next) => {
+      try {
+        const now = new Date();
+        const in23h = new Date(now.getTime() + 23 * 60 * 60 * 1000);
+        const in24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        let appts = []; let useFallback = false;
+        const { data, error } = await supabase.from('appointments')
+          .select('id, starts_at, session_type, location, notes, reminder_sent,
+                   patients:patients!appointments_patient_id_fkey(first_name, last_name,
+                   caregiver_id)')
+          .gte('starts_at', now.toISOString())
+          .lte('starts_at', in24h.toISOString())
+          .eq('status', 'scheduled');
+        if (error && error.message.includes('reminder_sent')) {
+          // Fallback: if the column does not exist yet, use a [23h, 24h] window.
+          useFallback = true;
+          const { data: fbData } = await supabase.from('appointments')
+            .select('id, starts_at, session_type, location, notes, patients(...)')
+            .gte('starts_at', in23h.toISOString())
+            .lte('starts_at', in24h.toISOString())
+            .eq('status', 'scheduled');
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-13  COMPLIANCE AND WAIVER MANAGEMENT (FO-02 / FO-12)
+------------------------------------------------------------------------------
+Description : The admin compliance matrix cross-tabulates every active student
+               against the required consent and waiver forms and derives the
+               overdue / pending / compliant state of each cell.
+Source      : backend/routes/admin.js (720-800)
+
+    router.get('/compliance', async (req, res, next) => {
+      const [{ data: patients }, { data: types }] = await Promise.all([
+        supabase.from('patients')
+          .select('id, patient_id, first_name, middle_name, last_name, caregiver_id,
+                   admission_form_status, photo_url')
+          .eq('clinic_id', req.profile.clinic_id).is('deleted_at', null)
+          .order('patient_id', { ascending: true }),
+        supabase.from('document_types')
+          .select('code, title, description, category')
+          .in('code', COMPLIANCE_FORM_CODES),
+      ]);
+      const patientIds = (patients || []).map((patient) => patient.id);
+      let rows = [];
+      if (patientIds.length) {
+        const { data: submissionRows } = await supabase.from('waiver_submissions')
+          .select('id, due_date, status, document_type_code, patient_id,
+                   provisions_agreed, house_rules_agreed, signature_text, signed_at,
+                   answer_notes, answered_at, created_at, updated_at')
+          .in('patient_id', patientIds).in('document_type_code', COMPLIANCE_FORM_CODES);
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-14  ATTENDANCE AND MONTHLY SESSION RECORDS (FO-11)
+------------------------------------------------------------------------------
+Description : The administrator opens a monthly attendance sheet for a student,
+               marks each day Present / Absent / Excused, records the therapy
+               sessions delivered and renders the official FO-11 PDF.
+Source      : backend/routes/admin.js (2513, 2843); backend/lib/formPdf.js; migration 0054
+
+    -- migration 0054 — one sheet per student per month, one row per day
+    create unique index if not exists student_attendance_forms_unique_month
+      on public.student_attendance_session_forms (patient_id, lower(trim(month_year)));
+    create unique index if not exists student_attendance_records_unique_date
+      on public.student_attendance_records (form_id, date);
+    alter table public.student_attendance_records
+      add constraint student_attendance_status_check
+      check (status in ('Present', 'Absent', 'Excused'));
+    // backend/lib/formPdf.js — the FO-11 renderer
+    async function renderAttendancePdf({ bundle = {}, form = attendanceForm = {},
+                                         attendance = [], sessions = [], monthYear = '' }) {
+      const pdf = await PDFDocument.create();
+      // Letterhead background, monthly attendance grid, session records table,
+      // facilitator and signature blocks, then:
+      return Buffer.from(await pdf.save({ useObjectStreams: false }));
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-15  UI DESIGN SYSTEM: TOKENS AND PRIMITIVES
+------------------------------------------------------------------------------
+Description : No component hard-codes a colour. All design tokens live in
+               src/index.css inside a Tailwind v4 @theme block, and every reusable
+               control is a primitive whose variants are props.
+Source      : frontend/src/index.css (@theme); frontend/src/components/ui/Button.jsx
+
+    /* frontend/src/index.css — design tokens */
+    @theme {
+      --color-charcoal:    #393842;
+      --color-cream:       #FAF6EF;
+      --color-kraft:       #EFE6D5;
+      --color-violet:      #8c52ff;
+      --color-violet-dark: #7033ea;
+      --color-pink:        #e06698;
+      --color-paper-yellow: #FEF08A;
+      --color-paper-pink:   #FBCFE8;
+      --color-paper-blue:   #BAE6FD;
+      --color-paper-green:  #BBF7D0;
+      --font-sans:         "Outfit", sans-serif;
+      --font-mono:         "Chakra Petch", monospace;
+      --font-handwriting:  "Caveat", cursive;
+    /* ... excerpt continues in the source file ... */
+------------------------------------------------------------------------------
+B-16  DIGITAL SIGNATURE CAPTURE
+------------------------------------------------------------------------------
+Description : Every signed CMPS form uses a signature captured either by drawing
+               on a canvas (pointer events, device-pixel-ratio aware) or by
+               uploading a PNG/JGB. The result is a data URL embedded in the record
+               and stamped into the generated PDF.
+Source      : frontend/src/components/ui/SignaturePad.jsx (4-104)
+
+    function DrawCanvas({ value, onChange }) {
+      const canvasRef = useRef(null)
+      const drawingRef = useRef(false)
+      const lastRef = useRef({ x: 0, y: 0 })
+      useEffect(() => {
+        const canvas = canvasRef.current
+        if (!canvas) return
+        const ratio = window.devicePixelRatio || 1
+        const rect = canvas.getBoundingClientRect()
+        canvas.width = rect.width * ratio
+        canvas.height = rect.height * ratio
+        const ctx = canvas.getContext('2d')
+        ctx.scale(ratio, ratio)
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round'
+        ctx.lineWidth = 2; ctx.strokeStyle = '#1e1b4b'
+    /* ... excerpt continues in the source file ... */
+================================================================================
+PART C — DATABASE SCHEMA REFERENCE
+================================================================================
+C.1  Tables (state after migration 0073)
+--------------------------------------------------------------------------------
+  Identity & Access      clinics, profiles, patient_id_counters
+  Students               patients, clinical_profiles, guardians,
+                         emergency_contacts
+  Consent & Compliance   waiver_submissions, document_types
+  Assessment Engine      assessment_templates, assessment_assignments,
+                         assessment_submissions, assessment_reports,
+                         assessment_activation_requests, assessment_permissions
+  Clinical Support       interventions, mainstreaming_assessments, session_logs
+  Attendance (FO-11)     student_attendance_session_forms,
+                         student_attendance_records, student_session_records
+  Document Release       assessment_document_release_requests,
+                         assessment_document_release_items
+  Engagement             daily_activity_logs, announcements, appointments,
+                         appointment_participants, notifications, audit_log
+  Retired and dropped: admin_profiles, staff, documents, survey_responses.
+
+C.2  Key Enumerated Types
+--------------------------------------------------------------------------------
+  user_role                      client | psychologist | psychometrician | admin |
+                                 speech_therapist | occupational_therapist
+  report_type                    behavioral | progress_summary | iep |
+                                 daily_activity
+  report_status                  draft | in_progress | ready_for_review |
+                                 revise_requested | approved | finalized
+  submission_status              draft | submitted | scored | approved |
+                                 finalized | revalidation
+  session_log_status             draft | pending | approved | revise_requested
+  document_release_request_status   pending | scheduled | declined | released |
+                                     cancelled
+  document_release_payment_status   unpaid | paid
+  compliance_status              pending | compliant | overdue
+  support_level                  HSN | MSN | LSN
+  appointment_format             individual | group
+  notification_type              appointment | report | assessment |
+                                 announcement | waiver | system
+  severity_enum                  info | warn | alert
+
+C.3  Security Helper Functions
+--------------------------------------------------------------------------------
+  current_role()                  -> user_role   (SECURITY DEFINER)
+  current_clinic()                -> uuid       (SECURITY DEFINER)
+  is_admin()                      -> boolean    (SECURITY DEFINER)
+  owns_patient(p_patient uuid)    -> boolean    (SECURITY DEFINER)
+  staff_can_access_patient(uuid)  -> boolean    (SECURITY DEFINER)
+  set_updated_at()                -> trigger    (generic updated_at trigger)
+  next_patient_id(clinic)         -> text       (CMPS-YYYY-NNN sequence)
+  handle_new_user()               -> trigger    (auto-provisions profiles)
+
+C.4  Migration Conventions  (backend/supabase/migrations/README.md)
+--------------------------------------------------------------------------------
+  - File name: NNNN_short_snake_case_description.sql
+  - Never edit an already-applied migration; add a new one.
+  - Every new table gets the public.set_updated_at() trigger.
+  - New ENUM values receive their own migration (ALTER TYPE ... ADD VALUE).
+  - RLS: caregivers see only their own rows; staff see clinic-scoped rows;
+    administrators see everything inside their clinic.
+  - Never drop a column until the code has stopped referencing it.
+  - Always finish with: notify pgrst, 'reload schema';
+
+================================================================================
+PART D — CONFIGURATION, DEPLOYMENT AND CI
+================================================================================
+D.1  Environment Variables
+--------------------------------------------------------------------------------
+  backend/.env
+    PORT=4000
+    CORS_ORIGIN=http://localhost:5173,http://localhost:5174   # comma separated
+    SUPABASE_URL=
+    SUPABASE_SERVICE_ROLE_KEY=        # server only — never sent to the browser
+    PUBLIC_APP_URL=https://cymon-clinic.vercel.app
+    RESEND_API_KEY=
+    RESEND_FROM="ClearMind Psychological Services <onboarding@resend.dev>"
+    CLINIC_TIME_ZONE=Asia/Manila      # default
+  frontend/.env
+    VITE_API_BASE_URL=                # empty in dev (Vite proxy); origin in prod
+    VITE_SUPABASE_URL=
+    VITE_SUPABASE_ANON_KEY=           # browser-safe anon key only
+
+D.2  Express Bootstrap, CORS and the Central Error Handler (backend/app.js)
+--------------------------------------------------------------------------------
+    const allowedOrigins = (process.env.CORS_ORIGIN ||
+      'http://localhost:5173,http://localhost:5174').split(',')
+      .map((o) => o.trim()).filter(Boolean);
+    app.use(cors({
+      origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+        return callback(new Error(`Origin ${origin} not allowed by CORS`));
+      },
+      credentials: true,
+    }));
+    app.use(express.json({ limit: '10mb' }));
+    app.get('/api/health', (req, res) => {
+      res.json({ status: 'ok', uptime: process.uptime(), allowedOrigins });
+    });
+    // Central error middleware — never return 200 with an { error } payload.
+    app.use((err, req, res, _next) => {
+      console.error(err);
+      const status = err.status || 500;
+      res.status(status).json({ error: err.message || 'Internal Server Error' });
+    });
+
+D.3  API Surface  (122 endpoints across 6 routers)
+--------------------------------------------------------------------------------
+  /api/auth              9   signup, login, me, staff-directory, profile,
+                             change-password, forgot/reset-password, announcements
+  /api/client           25   patient, home, activity-logs, appointments,
+                             announcements, waivers, assessments, releases, PDFs
+  /api/admin            44   overview, patients, employees, compliance, schedule,
+                             documents, announcements, audit, scoring, attendance,
+                             assessment permissions, document releases
+  /api/psychologist     15   approvals, roster, mainstreaming, interventions,
+                             progress, report sign-off, activity-log review
+  /api/psychometrician  24   tasks, assessments, data-review, reports, activity
+                             logs, IEP, journal permission
+  /api/notifications     2   list (10 latest + unread count), mark read
+
+D.4  Continuous Integration and Deployment  (.github/workflows)
+--------------------------------------------------------------------------------
+  ci.yml     On pull request and push to main:
+               frontend job -> npm ci, npm run lint, npm run build
+               backend job  -> npm ci, node -e "require('./app')"  (smoke import)
+  deploy.yml On push to main:
+               frontend/ -> Vercel project  cymon
+               backend/  -> Vercel project  cymon-fpoj
+  frontend/vercel.json  SPA rewrite -> /index.html
+  backend/vercel.json   serverless entry /api/index + daily cron
+
+D.5  Frontend API Client  (frontend/src/lib/api.js:38-97)
+--------------------------------------------------------------------------------
+    async function request(path, { method = 'GET', body, auth = false,
+                                   accessToken: suppliedToken = null } = {}) {
+      const headers = { 'Content-Type': 'application/json' }
+      if (auth) {
+        const accessToken = suppliedToken || getAccessToken()
+        if (!accessToken) {
+          throw new Error('Your session expired or is missing. Please sign in again.')
+        }
+        headers.Authorization = `Bearer ${accessToken}`
+      }
+      const res = await fetch(`${BASE}${path}`, {
+        method, headers, body: body ? JSON.stringify(body) : undefined })
+      const text = await res.text()
+      const data = text ? JSON.parse(text) : null
+      if (!res.ok) {
+        const message = data?.error || `Request failed (${res.status})`
+        const err = new Error(message); err.status = res.status; throw err
+      }
+      return data
+    }
+    async function download(path, { auth = false } = {}) {
+      const headers = {}
+      if (auth) {
+        const accessToken = getAccessToken()
+        if (!accessToken) {
+          throw new Error('Your session expired or is missing. Please sign in again.')
+        }
+        headers.Authorization = `Bearer ${accessToken}`
+      }
+      const res = await fetch(`${BASE}${path}`, { headers })
+      if (!res.ok) {
+        const text = await res.text()
+        let data = null
+        try { data = text ? JSON.parse(text) : null } catch { /* may not be JSON */ }
+        const err = new Error(data?.error || `Download failed (${res.status})`)
+        err.status = res.status; throw err
+      }
+      return res.blob()
+    }
+
+================================================================================
+                              END OF PROGRAM LISTING
+================================================================================

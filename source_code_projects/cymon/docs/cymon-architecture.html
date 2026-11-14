@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CYMON — Updated System Architecture (Figure 25)</title>
+<style>
+  :root { --bg:#0f172a; --card:#1e293b; --line:#38bdf8; --txt:#e2e8f0; --mut:#94a3b8; --acc:#22d3ee; --grn:#34d399; --amb:#fbbf24; }
+  * { box-sizing:border-box; font-family:Segoe UI, Arial, sans-serif; }
+  body { margin:0; background:var(--bg); color:var(--txt); padding:24px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  p.sub { color:var(--mut); margin:0 0 20px; font-size:14px; }
+  .tier { border:2px solid var(--line); border-radius:14px; padding:16px; margin:0 auto 18px; max-width:1100px; background:var(--card); }
+  .tier h2 { margin:0 0 4px; font-size:17px; color:var(--acc); }
+  .tier .stack { font-size:12px; color:var(--mut); margin-bottom:12px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; }
+  .box { background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px 12px; font-size:13px; line-height:1.45; }
+  .box b { color:#fff; display:block; margin-bottom:4px; font-size:13px; }
+  .box small { color:var(--mut); }
+  .flow { text-align:center; color:var(--amb); font-size:13px; margin:6px 0; letter-spacing:.3px; }
+  .legend { max-width:1100px; margin:18px auto 0; font-size:13px; color:var(--mut); }
+  .legend code { color:var(--grn); }
+  @media print { body { background:#fff; color:#000; } .tier { background:#fff; color:#000; } .box { background:#f1f5f9; color:#000; } }
+</style>
+</head>
+<body>
+<h1>CYMON — Updated System Architecture (Figure 25 replacement)</h1>
+<p class="sub">ClearMind Psychological Services (CMPS) · Three-Tier · matches current code: React 19 + Express 5 + Supabase · open this file in any browser to view/print</p>
+
+<div class="tier">
+  <h2>TIER 1 — PRESENTATION TIER (Frontend)</h2>
+  <div class="stack">React 19 + Vite 8 + Tailwind CSS v4 · React Router 7 · Recharts · Lucide · react-hot-toast · pdfjs-dist · Supabase JS session client · SPA on Vercel · <code>/api/*</code> via Vite proxy (dev) / rewrite (prod)</div>
+  <div class="grid">
+    <div class="box"><b>Public Landing</b>ShaderGradient / Three.js hero, Specialties scrollytelling, Announcements carousel, dark/light toggle, hamburger menu (mobile).</div>
+    <div class="box"><b>Auth UI</b>Login (email or CMPS-XXXX-XXX + password), Remember me, Forgot password → Send OTP → Verify OTP (10 min) → Reset password.</div>
+    <div class="box"><b>Client Portal</b>Home &amp; Progress trackers, Daily Journal log, Assessment Services (Start / Download PDF), Appointments (Upcoming/Past, Join Telehealth), Consents &amp; Waivers e-sign, Announcements.</div>
+    <div class="box"><b>Psychologist Dashboard</b>Tasks, Students roster (Support Level, Milestone slider), Intake Interview (1/student), Approvals (View / Approve / Request Revision / Reject), Daily Activity Report, Monthly Report (Generate / Export PDF), Student Journal.</div>
+    <div class="box"><b>Psychometrician Dashboard</b>Task list, Student Roster (read-only), Assessment Services (Assign / Answer Likert, Save Progress / Submit), FO-03/FO-04 Scoring Guide (read-only suggestion), IEP Workspace (Create / Add Goal / Request Co-Sign), Attendance, Monthly draft, Student Journal.</div>
+    <div class="box"><b>Admin / Super Admin Dashboard</b>Overview charts, Students (Register / Archive / Restore / Admission Slip PDF), Employees (Add / Manage Roles / Deactivate / Reactivate), Compliance, Front Desk schedule, Attendance (Present/Late/Absent), Clinical Records, Content Manager, Announcements, Audit Trail (append-only + CSV export for Super Admin).</div>
+  </div>
+</div>
+<div class="flow">▼ HTTPS (TLS at platform) · JSON / multipart — fetch('/api/...') ▼</div>
+
+<div class="tier">
+  <h2>TIER 2 — APPLICATION TIER (Backend)</h2>
+  <div class="stack">Node.js + Express 5 (CommonJS) · <code>app.js → routes → middleware/requireAuth → lib/*</code> · local :4000 / Vercel serverless · DTO whitelisting (<code>lib/dto.js</code>), central error middleware</div>
+  <div class="grid">
+    <div class="box"><b>Edge / Cross-cutting</b>CORS allowlist + credentials, <code>express.json 10mb</code>, <code>express.raw</code> ONLY for <code>/api/payments/webhook/paymongo</code> (HMAC verify), 404 JSON, error → <code>next(err)</code>.</div>
+    <div class="box"><b>Security &amp; Auth</b><code>middleware/requireAuth.js</code>: Supabase Auth <code>getUser(Bearer)</code> → <code>profiles</code> (role + extra_roles + <code>x-active-role</code> + <code>deleted_at</code> deactivation check). No custom JWT, no Multer.</div>
+    <div class="box"><b>Routes (controllers)</b><code>/api/auth, /public, /client, /admin, /psychologist, /psychometrician, /notifications, /payments, /cron/reminders (x-cron-secret), /health</code>. Role checks via <code>lib/permissions.js</code>; writes logged via <code>lib/audit.js</code>.</div>
+    <div class="box"><b>Services</b><code>lib/email.js</code> (Resend prod + Nodemailer dev fallback), <code>lib/notify.js</code>, <code>lib/paymongo.js</code>, <code>lib/appointments.js</code>, <code>lib/documentReleases.js</code>, cron reminder job (23–24h window, <code>reminder_sent</code> flag).</div>
+    <div class="box"><b>PDF pipeline</b><code>pdf-lib</code> generate · <code>pdf-parse</code> read · <code>pngjs signatureInk</code> recolor · <code>pdfWatermark</code> · <code>formPdf / formLayouts / assessmentSchemas / dynamicFO03 / dynamicFO05 / behavioralReport / assessmentReleaseSlipPdf</code>.</div>
+  </div>
+</div>
+<div class="flow">▼ Supabase client over HTTPS/443 (PostgREST + Storage API + Auth API) · Resend / PayMongo HTTPS REST ▼</div>
+
+<div class="tier">
+  <h2>TIER 3 — DATA TIER + EXTERNAL SERVICES</h2>
+  <div class="stack">Supabase (Postgres + Auth + Storage) · Resend · PayMongo · Vercel Cron — no raw TCP from app code, no WAF/API-gateway code in repo (handled by host)</div>
+  <div class="grid">
+    <div class="box"><b>Supabase Postgres (RLS)</b>profiles, patients, appointments, assessments, reports, session_logs, journals, IEPs, waivers, announcements, document_releases, notifications, <b>audit_trail</b> (UPDATE/DELETE blocked by trigger; service-role write, admin read).</div>
+    <div class="box"><b>Supabase Auth</b>Email/password + session tokens; OTP password-reset; deactivation via <code>profiles.deleted_at</code> / patient archive propagates to login block.</div>
+    <div class="box"><b>Supabase Storage</b>Clinical PDFs, announcement images, avatars — signed URLs / streaming over HTTPS.</div>
+    <div class="box"><b>Resend (prod) / Nodemailer SMTP (dev)</b>Welcome, OTP, appointment reminders, notifications. <small>Gmail-API note in STACK.md is aspirational — code uses Resend + Nodemailer.</small></div>
+    <div class="box"><b>PayMongo</b>Payment links + raw-body webhook with HMAC signature verification.</div>
+    <div class="box"><b>Vercel Cron → /api/cron/reminders</b>Sends unscheduled reminder emails; guarded by <code>x-cron-secret</code>, not user auth.</div>
+  </div>
+</div>
+<div class="flow">▲ DTO-whitelisted encrypted JSON returns → React renders (Recharts charts, task badges, PDF iframe desktop / pdfjs image mobile) ▲</div>
+
+<div class="legend">
+  <b>What changed vs your old text:</b> Guardian Portal → full <code>Client Portal</code>; Clinician Dashboard → <code>Psychologist + Psychometrician + Admin/Super Admin</code> dashboards; custom JWT middleware → <code>Supabase Auth + requireAuth + profiles/RLS</code>; Multer uploads → <code>Supabase Storage signed URLs</code>; raw TCP→Postgres → <code>Supabase client over HTTPS</code>; added <code>Resend + PayMongo + Cron reminders + Audit Trail + PDF pipeline</code>; removed WAF/API-gateway (no such code — TLS/CORS handled by Vercel/Express).<br/>
+  <b>Editable source:</b> <code>docs/cymon-architecture.mmd</code> (paste into https://mermaid.live). <b>This diagram:</b> <code>docs/cymon-architecture.html</code>.
+</div>
+</body>
+</html>

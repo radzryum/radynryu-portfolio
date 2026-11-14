@@ -1,0 +1,89 @@
+body{
+    background-image: url(..//img/bg.jpg);
+	width: auto;
+	background-repeat: repeat;
+	background-position: center;
+	font-family: arial;
+	margin: 0;
+	padding: 0;
+}
+.main{
+	margin: auto;
+	
+}
+.home{
+    position: relative;
+    top: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+.home:hover{
+    transform: translateY(-20px);
+}
+.home img{
+    width: 90px;
+    height: 90px;
+}
+.first h1{
+	max-width: 800px;
+	background: rgb(255, 172, 230);
+	border-radius: 100px;
+	font-family: Padding;
+	position: relative;
+	font-size: 3em;
+	color: rgb(255, 238, 246);
+	top: -10px;
+}
+.accordion{
+	position: relative;
+	top: 10px;
+	max-width: 800px;
+}
+.accordion .contentBx{
+	position: relative;
+	padding: 10px;
+}
+.accordion .contentBx .label h2{
+	text-align: justify;
+	font-family: Rockwell;
+}
+.accordion .contentBx .label {
+	border-radius: 22px 44px 66px;
+	position: relative;
+	padding: 10px;
+	background: rgb(215, 162, 196);
+	color: white;
+	cursor: pointer;
+}
+.accordion .contentBx .label ::before{
+	content: '+';
+	position: absolute;
+	top: 50%;
+	right: 20px;
+	transform: translateY(-50%);
+	font-size: 1.5em;
+}
+.accordion .contentBx.active .label ::before{
+content: '-';
+}
+.accordion .contentBx .content{
+	margin-top: 5px;
+	border-left: 9px solid rgb(209, 92, 164);
+	border-radius: 6px;
+	text-align: justify;
+	position: relative;
+	color: white;
+	background-color: rgba(0,0,0,0.6);
+	height: 0;
+	overflow: hidden;
+	transition: 0.5s;
+	overflow-y: auto;
+}
+.accordion .contentBx .content p{
+	font-family: Rockwell;
+	font-size: 1em;
+}
+.accordion .contentBx.active .content{
+	height: 80px;
+	padding: 10px;
+}

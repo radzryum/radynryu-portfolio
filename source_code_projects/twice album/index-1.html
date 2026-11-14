@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SGAlbums</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="js/main.js"></script>
+	<link rel="icon" href="img/CCS.png">
+</head>
+
+
+
+<body>
+	 <div class="container">
+	 	
+	 	<a href="#Navigation" class="navib" id="navib" onclick="nav()">
+	 		<div class="navil l1" id="nl1"></div>
+	 		<div class="navil l2" id="nl2"></div>
+	 		<div class="navil l3" id="nl3"></div>
+	 	</a>
+
+	 	<div class="navicons" id="ni">
+	 		<a href="#Home" title="Home" id="n1l" onclick="pageout()">
+	 			<img src="img/icons/home.png" class="ni n1" id="n1">
+	 		</a>
+	 		<br>
+	 		<a href="#Members" title="Members" id="n2l" onclick="pagein(2)">
+	 		<div class="prof">	<img src="img/icons/profile.png" class="ni n2" id="n2"></div>
+	 		</a>
+	 		<br>
+	 		<a href="#Gallery" title="Gallery" id="n3l" onclick="pagein(3)">
+	 			<img src="img/icons/gallery.png" class="ni n3" id="n3">
+	 		</a>
+	 		<br>
+	 		<a href="#ContactMe" title="Contact Me" id="n4l" onclick="pagein(4)">
+	 			<img src="img/icons/phone.png" class="ni n4" id="n4">
+	 		</a>
+	 		<br>
+	 		<a href="#AboutMe" title="About Me" id="n5l" onclick="pagein(5)">
+	 			<img src="img/icons/about.png" class="ni n5" id="n5">
+	 		</a>
+	 	</div>
+
+	 		 <div class="sgxt">
+	 			<img src="img/CCS.png" class="sglogo">
+	 		</div>
+	 		<a href="#Home" class="sgxtfil" onclick="pageout();formpclose();nav();" id="sgimg">
+	 			<img src="img/x1.png" class="sgxtimg">
+	 		</a>
+
+	 	<div class="homepage">
+
+	 		<div class="homebg">
+	 			<img src="img/bgimg.png" class="bgimg">
+	 			<video autoplay muted loop id="bgvid">
+				  <source src="img/bgvid.mp4" type="video/mp4">
+				</video>
+	 		</div>
+
+	 			<div class="sgxtxt" id="sgxtxt">
+	 				OLFU x TWICE
+	 				<div class="sgxtxtcont"></div>
+	 			</div>
+	 		<a href="#OrderNow" class="onhomecont" onclick="pagein(2);nav()" id="onhomecont"></a>
+	 		<div class="onhome" id="onhome">
+	 			<div id="onhomedis">
+	 			<a class="counter c1" id="c1" href="#OrderNow"></a>
+	 			<a class="counter c2" id="c2" href="#OrderNow"></a>
+	 			<div class="onhometxt">Albums Left</div>
+	 			<div class="orderb">ORDER NOW!</div>
+	 			</div>
+	 		</div>
+
+
+	 		<div class="formulahome" id="formulahome">
+	 			<img src="img/formula.png" class="formulaimg">
+	 			<div class="formulatxt">Twice comeback on Nov. 11, 2021</div>
+	 		</div>
+
+	 		<a href="#FormulaOfLove" class="formulacont" id="formulacont" onclick="formp();nav(-1)"></a>
+
+
+	 		<div class="formulapage" id="formp">
+	 			<img src="img/formbg.png" class="formbg" id="formbg">
+	 			<div data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.5" class="formcov" id="formcov">
+	 				<img src="img/formcov1.png" class="formcovz">
+	 				<img src="img/formtxtz.png" class="formtxtz">
+	 			</div>
+	 			<div class="ver pre">VERSIONS</div>
+	 			<div class="ver v1">STUDY ABOUT LOVE</div>
+	 			<div class="ver v2">BREAK IT</div>
+	 			<div class="ver v3">EXPLOSION</div>
+	 			<div class="ver v4">FULL OF LOVE</div>
+	 			<div class="linee l1"></div>
+	 			<div class="linee l2"></div>
+	 			<div class="linee l3"></div>
+	 			<div class="linee l4"></div>
+	 			<div class="formtrack" id="formtrack">1. "Scientist" - 3:14<br>2. "Moonlight" - 3:39<br>3. "Icon" - 2:56<br>4. "Cruel" - 3:31<br>5. "Real You" - 3:07<br>6. "F.I.L.A. (Fall in Love Again)" - 3:11<br>7. "Last Waltz" - 2:50<br>8. "Espresso" - 3:07<br>9. "Rewind (알고 싶지 않아)" - 3:00<br>10. "Cactus (산인장)" - 3:37<br>11. "Push & Pull" (Sana, Jihyo, Dahyun) - 3:25<br>12. "Hello" (Nayeon, Momo, Chaeyoung) - 3:03<br>13. "1, 3, 2" (Jeongyeon, Mina, Tzuyu) - 3:18<br>14. "Candy" - 3:15<br>15. "The Feels (Korean ver.)" (CD Only) - 3:18<br>16. "The Feels" (Digital Only) - 3:18<br>17. "Scientist (R3hab Remix)" (Digital Only) - 3:28
+				</div>
+	 		</div>
+	 		
+	 	<div id="pager">
+	 		<div id="pages">
+	 			<div class="pages p1" id="2">
+	 				<video autoplay muted loop id="bgvid">
+				 		<source src="img/bgordernow.mp4" type="video/mp4">
+					</video>
+					
+					<div class="members">
+					<div data-tilt data-tilt-max="10" class="item i1">
+	 					<div class="itemimg i1"></div>
+	 					<div class="itemprice">Im Nayeon<br>Age: 26 <br>Role: Lead vocalist & dancer</div>
+	 					<div class="quan" id="q1">0</div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="10" class="item i2">
+	 					<div class="itemimg i2"></div>
+	 					<div class="itemprice">Yoo Jeongyon<br>Age: 25 <br>Role: Lead vocalist</div>
+	 					<div class="quan" id="q2"></div>
+	 				</div>
+					 <div class="momo">
+	 				<div data-tilt data-tilt-max="10" class="item i3">
+	 					<div class="itemimg i3"></div>
+	 					<div class="itemprice">Hirai Momo<br>Age: 25<br>Role: Main dancer & Support vocalist</div>
+	 					<div class="quan" id="q3"></div>
+	 				</div>
+				</div>
+	 				<div data-tilt data-tilt-max="10" class="item i4">
+	 					<div class="itemimg i4"></div>
+	 					<div class="itemprice">Minatozaki Sana<br>Age: 25<br>Role: Support vocalist</div>
+	 					<div class="quan" id="q4"></div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="10" class="item i5">
+	 					<div class="itemimg i5"></div>
+	 					<div class="itemprice">Park Jihyo<br>Age: 25<br>Role: Leader and Main vocalist</div>
+	 					<div class="quan" id="q5"></div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="10" class="item i6">
+	 					<div class="itemimg i6"></div>
+	 					<div class="itemprice">Mina Sharon Myōi<br>Age: 25<br>Role: Main dancer & Support vocalist</div>
+	 					<div class="quan" id="q6">0</div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="10" class="item i7">
+	 					<div class="itemimg i7"></div>
+	 					<div class="itemprice">Kim Dahyun<br>Age: 25<br>Role: Lead rapper & Sub vocalist</div>
+	 					<div class="quan" id="q7"></div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="10" class="item i9">
+	 					<div class="itemimg i9"></div>
+	 					<div class="itemprice">Son Chaeyoung<br>Age: 25<br>Role: Main rapper & Sub vocalist</div>
+	 					<div class="quan" id="q9"></div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="10" class="item i10">
+	 					<div class="itemimg i10"></div>
+	 					<div class="itemprice">Chou Tzuyu<br>Age: 25<br>Role:  Lead dancer, Sub vocalist & Visual</div>
+	 					<div class="quan" id="q10"></div>
+	 				</div>
+				</div>
+	 			</div>
+	 			<div class="pages p2" id="3">
+	 				<div class="album a1" id="a1">
+	 					<video autoplay loop class="abg" id="abg1">
+				 			<source src="img/a1bg.mp4" type="video/mp4">
+						</video>
+	 					<div data-tilt data-tilt-max="30" class="ver1 a">
+	 						<div class="ver1acov"></div>
+	 						<div class="ver1abind"></div>
+	 					</div>
+	 					<div data-tilt data-tilt-max="30" class="ver1 b">
+	 						<div class="ver1bcov"></div>
+	 						<div class="ver1bbind"></div>
+	 					</div>
+	 					<div data-tilt data-tilt-max="30" class="ver1 c">
+	 						<div class="ver1ccov"></div>
+	 						<div class="ver1cbind"></div>
+	 					</div>
+	 					<img src="img/album/ttgram.png" class="ttgram">
+	 					<img src="img/album/ttga.png" class="ttg aa">
+	 					<img src="img/album/ttgb.png" class="ttg bb">
+	 					<img src="img/album/ttgc.png" class="ttg cc">
+	 				</div>
+	 				<div class="album a2" id="a2">
+	 					<video autoplay loop class="abg" id="abg2">
+				 			<source src="img/a2bg.mp4" type="video/mp4">
+						</video>
+	 					<div data-tilt data-tilt-max="30" class="ver2 a">
+	 						<div class="ver2acov"></div>
+	 						<div class="ver2abind"></div>
+	 					</div>
+	 					<div data-tilt data-tilt-max="30" class="ver2 b">
+	 						<div class="ver2bcov"></div>
+	 						<div class="ver2bbind"></div>
+	 					</div>
+	 					<div data-tilt data-tilt-max="30" class="ver2 c">
+	 						<div class="ver2ccov"></div>
+	 						<div class="ver2cbind"></div>
+	 					</div>
+	 					<img src="img/album/ewo1.png" class="ewov v1">
+	 					<img src="img/album/ewo2.png" class="ewov v2">
+	 					<img src="img/album/ewo3.png" class="ewov v3">
+	 				</div>
+	 				<div class="album a3" id="a3">
+	 					<video autoplay loop class="abg" id="abg3">
+				 			<source src="img/a3bg.mp4" type="video/mp4">
+						</video>
+	 					<div data-tilt class="a3v1b">
+	 						<img  src="img/album/a3v1.png" class="a3v1">
+	 					</div>
+	 					<div data-tilt class="a3v2b">
+	 						<img  src="img/album/a3v2.png" class="a3v2">
+	 					</div>
+	 					<div data-tilt class="a3v3b">
+	 						<img  src="img/album/a3v3.png" class="a3v3">
+	 					</div>
+	 					<div data-tilt class="a3v4b">
+	 						<img  src="img/album/a3v4.png" class="a3v4">
+	 					</div>
+	 				</div>
+	 				<a href="#" class="back" id="back" onclick="back()"></a>
+	 				<a href="#" class="forward" id="forward" onclick="forward()"></a>
+	 			</div>
+	 			<div class="pages p3" id="4">
+	 				<div data-tilt data-tilt-max="20"  class="mdoor d1">
+	 					<img src="img/icons/phonec.png" class="contimg phonec">
+	 					<div class="contxt number">09123456789</div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="20" class="mdoor d2">
+	 					<img src="img/icons/email.png" class="contimg">
+	 					<div class="contxt">olfustudent@gmail.com</div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="20" class="mdoor d3">
+	 					<img src="img/icons/fb.png" class="contimg">
+	 					<div class="contxt fb">Fatimanian Once</div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="20" class="mdoor d4">
+	 					<img src="img/icons/tw.png" class="contimg">
+	 					<div class="contxt">@fatimanian_Once</div>
+	 				</div>
+	 				<div data-tilt data-tilt-max="20" class="mdoor d5">
+	 					<img src="img/icons/ins.png" class="contimg">
+	 					<div class="contxt">@fatimanian_Oncee</div>
+	 				</div>
+	 			</div>
+	 			<div class="pages p4" id="5">
+	 				<div class="abtxt"><b>ABOUT US.</b></div>
+	 				<div class="infotxt"> We are a proprietor that loves K-Pop merch. So we started our own business related to it. This year, we launched our company with the hopes of making money while having fun. We currently solely sell TWICE's records, but we plan to expand our offerings in the future to include albums and merchandise from other K-Pop groups.</div>
+	 				
+					 <div class="member">						 
+						 <a href="members/twice member.html"><img src="img/tam.png" class="tam"></a>
+						</div>
+						<div class="univlogo">
+							<a href="https://www.fatima.edu.ph/study/admissions/"><img src="img/univ.png"></a>
+						 </div>
+						 <div class="faqs">
+							 <a href="file:///C:/Users/radyn/Documents/FINAL%20webdev%20Project/html4/FAQS.html"><img src="img/faqs.png"></a>
+						 </div>
+	 				
+	 			</div>
+				
+	 		</div>
+	 	</div>
+
+	 	</div>
+
+	 </div>
+
+	 <script type="text/javascript" src="js/vanilla-tilt.min.js"></script>
+	 <script type="text/javascript">
+	 	randomizer();
+	 	parax('formulahome');
+	 	nclose();
+	 	pause();
+	 	document.getElementById("abg1").volume = 0.2;
+	 	document.getElementById("abg2").volume = 0.2;
+	 	document.getElementById("abg3").volume = 0.2;
+	 </script>
+</body>
+</html>

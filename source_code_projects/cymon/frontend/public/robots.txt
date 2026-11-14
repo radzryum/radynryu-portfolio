@@ -1,0 +1,3 @@
+# Authenticated clinic portal — keep out of search indexes.
+User-agent: *
+Disallow: /

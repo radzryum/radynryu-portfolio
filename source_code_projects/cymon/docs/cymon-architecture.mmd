@@ -1,0 +1,61 @@
+%% CYMON — Updated System Architecture (Figure 25 replacement)
+%% Render at https://mermaid.live — paste this file contents.
+%% Three-tier: Presentation / Application / Data + External Services
+
+flowchart TB
+    subgraph Client["CLIENT DEVICES"]
+        Browser["Desktop / Mobile Browser"]
+    end
+
+    subgraph Presentation["PRESENTATION TIER — Frontend (React 19 + Vite 8 + Tailwind v4, React Router 7, SPA on Vercel)"]
+        direction TB
+        Landing["Public Landing<br/>ShaderGradient / Three.js, Announcements carousel, Dark-Light"]
+        AuthUI["Auth UI<br/>Login (email / CMPS-ID + password), OTP Forgot-Reset, Remember me"]
+        ClientPortal["Client Portal<br/>Home-Progress, Daily Journal, Assessments + PDF download,<br/>Appointments + Telehealth, Waivers e-sign, Announcements"]
+        PsychD["Psychologist Dashboard<br/>Tasks, Students roster, Intake Interview,<br/>Approvals (Approve / Revise / Reject),<br/>Monthly Report + PDF export, Student Journal"]
+        PsychmD["Psychometrician Dashboard<br/>Task list, Assessment assign-answer (Likert),<br/>FO-03 / FO-04 Scoring Guide (read-only),<br/>IEP Workspace + Co-Sign, Attendance, Monthly draft"]
+        AdminD["Admin / Super Admin Dashboard<br/>Overview charts (Recharts), Students register-archive,<br/>Employees roles-deactivate, Front Desk schedule,<br/>Clinical Records, Content Manager, Announcements,<br/>Audit Trail + CSV export"]
+        FEInfra["Shared infra<br/>lib/api.js fetch('/api/*') via Vite proxy<br/>Supabase JS session client, pdfjs-dist mobile preview,<br/>react-hot-toast, lucide-react"]
+    end
+
+    subgraph Application["APPLICATION TIER — Backend (Express 5 / Node.js CommonJS, Vercel serverless, local :4000)"]
+        direction TB
+        Edge["Edge<br/>CORS allowlist + credentials, express.json 10mb,<br/>express.raw for PayMongo webhook (HMAC),<br/>central error middleware, 404 JSON"]
+        AuthZ["Security + Auth<br/>middleware/requireAuth.js<br/>Supabase Auth getUser(Bearer) → profiles<br/>role + extra_roles + x-active-role + deleted_at check"]
+        Routes["Routes<br/>/api/auth /public /client /admin<br/>/psychologist /psychometrician<br/>/notifications /payments<br/>/cron/reminders (x-cron-secret) /health"]
+        Svc["Services (lib/)<br/>dto.js whitelisting, permissions.js,<br/>audit.js append-only, email.js (Resend + Nodemailer fallback),<br/>notify.js, paymongo.js"]
+        PDF["PDF pipeline<br/>pdf-lib generate, pdf-parse read,<br/>signatureInk (pngjs) recolor, pdfWatermark,<br/>formPdf / formLayouts / assessmentSchemas / dynamicFO03-FO05"]
+    end
+
+    subgraph DataTier["DATA TIER + EXTERNAL SERVICES (all via HTTPS/443, no raw TCP from app code)"]
+        direction TB
+        PG["Supabase Postgres<br/>profiles, patients, appointments, assessments,<br/>reports, session logs, journals, IEPs, waivers,<br/>announcements, document_releases, notifications,<br/>audit_trail (UPDATE-DELETE blocked by trigger, RLS)"]
+        SAuth["Supabase Auth<br/>email-password, session tokens,<br/>OTP password-reset flow"]
+        Store["Supabase Storage<br/>PDFs, announcement images, avatars<br/>signed URLs / streaming"]
+        Email["Resend API (prod) + Nodemailer SMTP (dev)<br/>welcome, OTP, appointment reminders"]
+        Pay["PayMongo API + webhook<br/>payment links, HMAC verification"]
+        Cron["Vercel Cron<br/>GET /api/cron/reminders"]
+    end
+
+    Browser -->|"HTTPS, TLS (platform)"| Landing
+    Browser -->|"HTTPS"| AuthUI
+    AuthUI --> FEInfra
+    Landing --> FEInfra
+    ClientPortal --> FEInfra
+    PsychD --> FEInfra
+    PsychmD --> FEInfra
+    AdminD --> FEInfra
+    FEInfra -->|"HTTPS JSON / multipart<br/>/api/* (Vite proxy dev, rewrite prod)"| Edge
+    Edge --> AuthZ
+    AuthZ --> Routes
+    Routes --> Svc
+    Svc --> PDF
+    Routes -->|"Supabase client (PostgREST HTTPS)"| PG
+    AuthZ -->|"getUser(token) HTTPS"| SAuth
+    Svc -->|"HTTPS signed URL / stream"| Store
+    Svc -->|"HTTPS REST"| Email
+    Svc -->|"HTTPS REST + webhook"| Pay
+    Cron -->|"HTTPS + x-cron-secret"| Routes
+    PG -->|"encrypted JSON (DTO-whitelisted)"| Routes
+    Routes -->|"encrypted JSON"| FEInfra
+    FEInfra -->|"render: Recharts charts, task lists,<br/>PDF iframe desktop / pdfjs mobile"| Browser
