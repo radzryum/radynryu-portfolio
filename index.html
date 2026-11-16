@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Radyn Ryu — Portfolio</title>
-  <meta name="description" content="Radyn Ryu M. Maloles — IT student, designer and full-stack developer in Cabuyao, Laguna. Projects, tech stack, certifications and contact." />
+  <title>Radyn Ryu · Portfolio</title>
+  <meta name="description" content="Radyn Ryu M. Maloles. IT student, designer and full stack developer in Cabuyao, Laguna. Projects, tech stack, certifications and contact." />
   <meta name="theme-color" content="#0c0c0c" />
   <link rel="icon" type="image/svg+xml" href="radynryu-portfolio-icon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
@@ -904,286 +904,6 @@
       display: grid;
     }
 
-    /* ===================== PLAYER BAR ===================== */
-    body {
-      padding-bottom: 80px;
-    }
-
-    .player-bar {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 90;
-      height: 80px;
-      background: rgba(12, 12, 12, 0.96);
-      color: var(--text);
-      backdrop-filter: blur(18px);
-      border-top: 1px solid #222;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-      align-items: center;
-      gap: 14px;
-      padding: 0 16px;
-    }
-
-    .pb-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .pb-art {
-      width: 52px;
-      height: 52px;
-      border-radius: 6px;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: #1a1a1a;
-    }
-
-    .pb-meta { min-width: 0; }
-
-    .pb-title {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: -0.1px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .pb-artist {
-      font-size: 11px;
-      color: #a7a7a7;
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .pb-like {
-      flex-shrink: 0;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #a7a7a7;
-      transition: color var(--transition), transform var(--transition);
-    }
-
-    .pb-like:hover { color: var(--accent); transform: scale(1.15); }
-    .pb-like.is-on { color: var(--accent); }
-    .pb-like.is-on svg { fill: var(--accent); }
-    .pb-like svg { width: 16px; height: 16px; }
-
-    .pb-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .pb-controls {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .pb-ctl {
-      color: #b9b9b9;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: color var(--transition), transform var(--transition);
-      position: relative;
-    }
-
-    .pb-ctl:hover { color: #fff; transform: scale(1.1); }
-    .pb-ctl.is-on { color: var(--accent); }
-    .pb-ctl.is-on::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-    .pb-ctl svg { width: 17px; height: 17px; }
-    .pb-ctl.small svg { width: 15px; height: 15px; }
-
-    .pb-play {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #fff;
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform var(--transition), background var(--transition);
-    }
-
-    .pb-play:hover { transform: scale(1.08); }
-    .pb-play svg { width: 18px; height: 18px; }
-    .pb-play .icon-pause { display: none; }
-    .pb-play.is-playing .icon-play { display: none; }
-    .pb-play.is-playing .icon-pause { display: block; }
-    /* gentle nudge until audio actually starts (browsers gate un-gestured sound) */
-    .pb-play.attention { animation: pbPulse 1.7s ease-in-out infinite; }
-    @keyframes pbPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
-      50% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .pb-play.attention { animation: none; box-shadow: 0 0 0 2px var(--accent); }
-    }
-
-    .pb-progress {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      width: 100%;
-      max-width: 560px;
-    }
-
-    .pb-time {
-      font-size: 10px;
-      color: #9d9d9d;
-      font-variant-numeric: tabular-nums;
-      width: 34px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .pb-seek {
-      position: relative;
-      flex: 1;
-      height: 4px;
-      background: #3a3a3a;
-      border-radius: 2px;
-      cursor: pointer;
-    }
-
-    .pb-seek-fill {
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 0%;
-      background: #fff;
-      border-radius: 2px;
-      pointer-events: none;
-    }
-
-    .pb-seek:hover .pb-seek-fill {
-      background: var(--accent);
-    }
-
-    .pb-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      justify-self: end;
-    }
-
-    .pb-spotify {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid rgba(74, 222, 128, 0.35);
-      border-radius: 999px;
-      padding: 8px 12px;
-      transition: border-color var(--transition), background var(--transition), transform var(--transition);
-      white-space: nowrap;
-    }
-
-    .pb-spotify:hover {
-      border-color: var(--accent);
-      background: rgba(74, 222, 128, 0.08);
-      transform: translateY(-1px);
-    }
-
-    .pb-spotify svg {
-      width: 12px;
-      height: 12px;
-    }
-
-    /* ===================== SPOTIFY HERO — LIGHT THEME ===================== */
-    body.theme-light .np-app {
-      background: #ffffff;
-      border-color: var(--border);
-      box-shadow: 0 30px 80px -34px rgba(15, 15, 15, 0.32), 0 0 0 1px #e1e1dd;
-    }
-    body.theme-light .np-main {
-      background:
-        radial-gradient(1100px 520px at 28% -8%, rgba(21, 128, 61, 0.15), transparent 68%),
-        radial-gradient(900px 500px at 95% 115%, rgba(21, 128, 61, 0.07), transparent 60%),
-        #ffffff;
-    }
-    body.theme-light .np-eyebrow { color: #5b5b5b; }
-    body.theme-light .np-act { background: #f1f2f0; border-color: #dedcd8; color: #3c3c3c; }
-    body.theme-light .np-act:hover { color: #0f0f0f; border-color: #bcbcb7; }
-    body.theme-light .np-video:hover { background: rgba(0, 0, 0, 0.05); }
-    body.theme-light .np-video-s { color: var(--muted); }
-    body.theme-light .np-card { background: #f6f7f5; }
-    body.theme-light .np-hire { border-color: #d4d4cf; }
-    body.theme-light .np-credit { border-bottom-color: #e4e4e0; }
-    body.theme-light .np-credit-role,
-    body.theme-light .np-credit-tag { color: var(--muted); }
-    body.theme-light .np-tour-row { border-bottom-color: #e4e4e0; }
-    body.theme-light .np-tour-row:hover { background: #eceeeb; }
-    body.theme-light .np-date-box { background: #eceeea; }
-    body.theme-light .np-date-m,
-    body.theme-light .np-tour-meta { color: var(--muted); }
-    body.theme-light .chip-green { background: rgba(21, 128, 61, 0.12); color: #15803d; }
-    body.theme-light .chip-amber { background: rgba(180, 83, 9, 0.12); color: #b45309; }
-    body.theme-light .chip-blue { background: rgba(29, 78, 216, 0.12); color: #1d4ed8; }
-    body.theme-light .np-queue { background: #ffffff; }
-    body.theme-light .np-tab { color: #5b5b5b; }
-    body.theme-light .np-tab.active { color: #0f0f0f; }
-    body.theme-light .np-qclose { color: #5b5b5b; }
-    body.theme-light .np-qclose:hover { color: #0f0f0f; background: #f0f0ee; }
-    body.theme-light .np-tile { background: #f2f3f1; border-color: var(--border); }
-    body.theme-light .np-tile-art { background: #e7e8e5; }
-    body.theme-light .np-tile-art::after { background: linear-gradient(90deg, transparent 55%, rgba(242, 243, 241, 0.5) 100%); }
-    body.theme-light .np-tile-meta { color: var(--muted); }
-    body.theme-light .np-tile-count { background: rgba(255, 255, 255, 0.85); color: var(--accent); border-color: rgba(0, 0, 0, 0.1); }
-    body.theme-light .np-tile:hover { border-color: rgba(21, 128, 61, 0.4); box-shadow: 0 14px 30px rgba(15, 15, 15, 0.16), 0 0 0 1px rgba(21, 128, 61, 0.25); }
-    body.theme-light .player-bar { background: rgba(255, 255, 255, 0.94); border-top: 1px solid #e0e0dc; box-shadow: 0 -6px 30px rgba(15, 15, 15, 0.08); }
-    body.theme-light .pb-art { background: #e8e8e6; }
-    body.theme-light .pb-artist { color: var(--muted); }
-    body.theme-light .pb-like { color: #5b5b5b; }
-    body.theme-light .pb-ctl { color: #4a4a4a; }
-    body.theme-light .pb-ctl:hover { color: #0f0f0f; }
-    body.theme-light .pb-play { background: #0f0f0f; color: #ffffff; }
-    body.theme-light .pb-seek { background: #dedcd8; }
-    body.theme-light .pb-seek-fill { background: #0f0f0f; }
-    body.theme-light .pb-seek:hover .pb-seek-fill { background: var(--accent); }
-    body.theme-light .pb-time { color: var(--muted); }
-    body.theme-light .pb-spotify { color: var(--accent); border-color: rgba(21, 128, 61, 0.4); }
-    body.theme-light .pb-spotify:hover { background: rgba(21, 128, 61, 0.08); }
-    body.theme-light .np-toast { background: #ffffff; border-color: var(--border); box-shadow: 0 16px 40px rgba(15, 15, 15, 0.18); }
-
-    .pb-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      opacity: 0;
-      pointer-events: none;
-    }
-
     /* Toast */
     .np-toast {
       position: fixed;
@@ -1288,9 +1008,6 @@
       .np-wrap { padding: 0 12px; }
       #hero { padding: 74px 0 18px; }
       .np-actions { display: none; }
-      .pb-time { display: none; }
-      .pb-title { font-size: 12px; }
-      .pb-art { width: 44px; height: 44px; }
       .np-progress-outer { gap: 0; }
       .np-about { min-height: 346px; }
       .np-about-img { object-position: center 10%; }
@@ -1329,6 +1046,10 @@
       transform: scale(0.92);
       visibility: hidden;
       pointer-events: none;
+    }
+
+    .welcome[hidden] {
+      display: none !important;
     }
 
     .welcome-grid {
@@ -3333,7 +3054,6 @@
        Re-declare the dark palette inside them so no light-mode color
        accidentally bleeds in. Light mode restyles them properly below. */
     body:not(.theme-light) .np-app,
-    body:not(.theme-light) .player-bar,
     body:not(.theme-light) .np-toast {
       --bg: #121212;
       --bg2: #181818;
@@ -3718,55 +3438,6 @@
       .np-about-name { font-size: clamp(23px, 7vw, 30px); }
     }
 
-    /* ---- Mobile: player bar — keep the song identity, drop the clutter that overlaps ---- */
-    @media (max-width: 640px) {
-      .player-bar {
-        height: 68px;
-        grid-template-columns: auto 1fr auto;
-        gap: 8px;
-        padding: 0 10px;
-        align-items: center;
-      }
-      .pb-art { width: 48px; height: 48px; border-radius: 8px; }
-      .pb-meta { display: block; max-width: 108px; }
-      .pb-title {
-        font-size: 12px;
-        letter-spacing: -0.1px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .pb-artist {
-        display: block;
-        font-size: 10px;
-        margin-top: 2px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      #pbLike,
-      #pbShuffle,
-      #pbRepeat,
-      #pbFullscreen { display: none !important; }
-      .pb-ctl { width: 27px; height: 27px; }
-      .pb-ctl.small svg { width: 13px; height: 13px; }
-      .pb-play { width: 40px; height: 40px; }
-      .pb-play svg { width: 17px; height: 17px; }
-      .pb-center { gap: 4px; }
-      .pb-progress { max-width: none; width: 100%; }
-      .pb-right { gap: 5px; }
-      .pb-spotify { padding: 7px 9px; }
-      .pb-spotify-text { display: none; }
-    }
-
-    @media (max-width: 400px) {
-      .player-bar { height: 60px; grid-template-columns: auto 1fr auto; gap: 7px; }
-      .pb-progress { display: none; }
-      .pb-spotify { display: none; }
-      .pb-artist { display: none !important; }
-      .pb-meta { max-width: 92px; }
-    }
-
     /* Simpler, cheaper reveals on tablets/phones (no heavy 3D + blur) */
     @media (max-width: 900px) {
       .fx-ghost-flip.fx, .fx-swing-l.fx, .fx-swing-r.fx, .fx-drop.fx, .fx-rise.fx,
@@ -3954,22 +3625,21 @@
     <span class="welcome-glow" aria-hidden="true"></span>
     <span class="welcome-grid" aria-hidden="true"></span>
     <div class="welcome-inner">
-      <p class="welcome-eyebrow">Radyn Ryu Maloles <span aria-hidden="true">·</span> Portfolio Sessions</p>
+      <p class="welcome-eyebrow">Portfolio Sessions</p>
       <h1 class="welcome-title" id="welcomeTitle">
-        <span class="welcome-line welcome-lead">You are now</span>
-        <span class="welcome-line welcome-huge">exploring <em>the</em></span>
-        <span class="welcome-line welcome-huge">portfolio of <strong>Radyn Ryu</strong></span>
+        <span class="welcome-line welcome-lead">Hey, I'm</span>
+        <span class="welcome-line welcome-huge"><strong>Radyn Ryu</strong></span>
       </h1>
-      <p class="welcome-sub" id="welcomeSub">Design-forward engineering, games I shipped, and certificates I earned — served with a soundtrack. 10 projects · 24 certificates · one studio.</p>
+      <p class="welcome-sub" id="welcomeSub">I design and build full stack apps and games. You are now exploring my portfolio, with a soundtrack. Ten projects, two dozen certificates and one studio.</p>
       <button class="welcome-enter" id="welcomeEnter" type="button" aria-keyshortcuts="Enter" aria-describedby="welcomeNote">
         <span class="welcome-enter-rings" aria-hidden="true"></span>
         <span class="welcome-enter-label">Enter Studio</span>
         <svg class="welcome-enter-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
       </button>
-      <p class="welcome-note" id="welcomeNote">Headphones recommended — the music starts the moment you enter. Press <kbd>Enter</kbd>.</p>
+      <p class="welcome-note" id="welcomeNote">Headphones recommended. The music starts the moment you enter. Press <kbd>Enter</kbd>.</p>
       <div class="welcome-now" id="welcomeNow" aria-live="polite">
         <span class="np-eq welcome-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
-        <span class="welcome-now-text"><strong>sombr — undressed</strong><span>Now playing · your visit</span></span>
+        <span class="welcome-now-text"><strong>sombr · undressed</strong><span>Now playing</span></span>
         <span class="welcome-now-bar" aria-hidden="true"><span class="welcome-now-fill"></span></span>
       </div>
     </div>
@@ -3996,14 +3666,14 @@
         class="giant-part giant-folio">FOLIO</span></span>
     <div class="splash-photo">
       <div class="splash-photo-wrap">
-        <img id="splashModelImg" src="assets/model-dither.png" alt="Radyn Ryu portrait — dithered" />
+        <img id="splashModelImg" src="assets/model-dither.png" alt="Radyn Ryu portrait, dithered" />
         <canvas class="splash-particles" id="splashParticles" aria-hidden="true"></canvas>
       </div>
     </div>
     <div class="splash-copy rise-up" style="transition-delay:0.18s">
       <span class="splash-hi">Hey, I'm</span>
       <p class="splash-name">Radyn Ryu</p>
-      <p class="splash-tag">Full-stack developer &amp; designer building <strong>thoughtful web, mobile, and visual
+      <p class="splash-tag">Full stack developer &amp; designer building <strong>thoughtful web, mobile, and visual
           experiences</strong> from idea to launch.</p>
     </div>
   </div>
@@ -4041,23 +3711,23 @@
 
           <!-- Top cards: the photoshoot grid -->
           <div class="np-videos">
-            <button class="np-video" type="button" data-cursor-label="View" data-photo="assets/top_img/1.jpg" data-caption="Studio Amber — seated, arms crossed">
-              <img class="np-video-img" src="assets/top_img/1.jpg" alt="Radyn Ryu — Studio Amber session, white shirt" style="object-position: center 22%" />
+            <button class="np-video" type="button" data-cursor-label="View" data-photo="assets/top_img/1.jpg" data-caption="Studio Amber, seated, arms crossed">
+              <img class="np-video-img" src="assets/top_img/1.jpg" alt="Radyn Ryu, Studio Amber session, white shirt" style="object-position: center 22%" />
               <div class="np-video-t">Studio Amber</div>
               <div class="np-video-s">Photoshoot · 2026</div>
             </button>
-            <button class="np-video" type="button" data-cursor-label="View" data-photo="assets/top_img/2.jpg" data-caption="Instax Moment — green backdrop, pink camera">
-              <img class="np-video-img" src="assets/top_img/2.jpg" alt="Radyn Ryu — Instax moment, olive backdrop" style="object-position: center 38%" />
+            <button class="np-video" type="button" data-cursor-label="View" data-photo="assets/top_img/2.jpg" data-caption="Instax Moment, green backdrop, pink camera">
+              <img class="np-video-img" src="assets/top_img/2.jpg" alt="Radyn Ryu, Instax moment, olive backdrop" style="object-position: center 38%" />
               <div class="np-video-t">Instax Moment</div>
               <div class="np-video-s">Photoshoot · 2026</div>
             </button>
-            <button class="np-video" type="button" data-cursor-label="View" data-photo="assets/top_img/3.jpg" data-caption="Pixel Shades — grey pixel glasses, green room">
-              <img class="np-video-img" src="assets/top_img/3.jpg" alt="Radyn Ryu — Pixel shades, green room" style="object-position: center 38%" />
+            <button class="np-video" type="button" data-cursor-label="View" data-photo="assets/top_img/3.jpg" data-caption="Pixel Shades, grey pixel glasses, green room">
+              <img class="np-video-img" src="assets/top_img/3.jpg" alt="Radyn Ryu, Pixel shades, green room" style="object-position: center 38%" />
               <div class="np-video-t">Pixel Shades</div>
               <div class="np-video-s">Photoshoot · 2026</div>
             </button>
-            <button class="np-video" type="button" data-cursor-label="View" data-photo="assets/top_img/4.jpg" data-caption="Studio Amber II — seated, white shirt">
-              <img class="np-video-img" src="assets/top_img/4.jpg" alt="Radyn Ryu — Studio Amber session, white shirt seated" style="object-position: center 16%" />
+            <button class="np-video" type="button" data-cursor-label="View" data-photo="assets/top_img/4.jpg" data-caption="Studio Amber II, seated, white shirt">
+              <img class="np-video-img" src="assets/top_img/4.jpg" alt="Radyn Ryu, Studio Amber session, white shirt seated" style="object-position: center 16%" />
               <div class="np-video-t">Studio Amber II</div>
               <div class="np-video-s">Photoshoot · 2026</div>
             </button>
@@ -4066,12 +3736,12 @@
           <!-- Artist + side cards -->
           <div class="np-lower">
             <div class="np-about">
-              <img class="np-about-img" src="assets/profile.jpg" alt="Radyn Ryu — full-stack developer and designer" />
+              <img class="np-about-img" src="assets/profile.jpg" alt="Radyn Ryu, full stack developer and designer" />
               <div class="np-about-content">
                 <div class="np-about-label">About the developer</div>
                 <div class="np-about-name">Radyn Ryu M. Maloles</div>
                 <div class="np-about-stats">10 projects · 26 technologies · 16 certificates</div>
-                <p class="np-about-bio">BS Information Technology student at Pamantasan ng Cabuyao. I design interfaces, ship working code, and turn messy ideas into polished products — from the first wireframe to the final deploy.</p>
+                <p class="np-about-bio">BS Information Technology student at Pamantasan ng Cabuyao. I design interfaces, ship working code, and turn messy ideas into polished products, from the first wireframe to the final deploy.</p>
                 <div class="np-about-foot">
                   <span class="np-about-loc">Cabuyao City, Laguna</span>
                   <a class="np-follow" href="Resume-2026_Maloles.pdf" download="Radyn-Ryu-Maloles-Resume.pdf">
@@ -4178,7 +3848,7 @@
               </span>
               <span class="np-tile-body">
                 <span class="np-tile-name">Selected Projects</span>
-                <span class="np-tile-meta">Featured work with full case studies — from the first wireframe to the launch.</span>
+                <span class="np-tile-meta">Featured work with full case studies, from the first wireframe to the launch.</span>
               </span>
             </button>
             <button class="np-tile" type="button" data-cursor-label="Open" data-scroll="#stack" aria-label="Go to Technologies Used">
@@ -4198,7 +3868,7 @@
               </span>
               <span class="np-tile-body">
                 <span class="np-tile-name">Certifications</span>
-                <span class="np-tile-meta">AWS · IBM · Cisco · Simplilearn · TESDA — all verified.</span>
+                <span class="np-tile-meta">AWS · IBM · Cisco · Simplilearn · TESDA, all verified.</span>
               </span>
             </button>
             <button class="np-tile wide" type="button" data-cursor-label="Open" data-scroll="#contact" aria-label="Go to Contact">
@@ -4208,7 +3878,7 @@
               </span>
               <span class="np-tile-body">
                 <span class="np-tile-name">Contact</span>
-                <span class="np-tile-meta">Available for freelance &amp; collaborations — let's build something.</span>
+                <span class="np-tile-meta">Available for freelance &amp; collaborations. Let's build something.</span>
               </span>
             </button>
           </div>
@@ -4261,7 +3931,7 @@
               </span>
               <span class="np-tile-body">
                 <span class="np-tile-name">Contact</span>
-                <span class="np-tile-meta">Let's work together — say hi.</span>
+                <span class="np-tile-meta">Let's work together. Say hi.</span>
               </span>
             </button>
           </div>
@@ -4302,8 +3972,8 @@
     </div>
     <div class="hero-row fade-up">
       <div>
-        <h2 class="hero-title">An IT student who <em>ships</em> — from the first sketch to the final deploy.</h2>
-        <p class="hero-sub">Who I am, where I studied, and what I bring to the table — real coursework, real honors, and a hands-on build log.</p>
+        <h2 class="hero-title">An IT student who <em>ships</em>, from the first sketch to the final deploy.</h2>
+        <p class="hero-sub">Who I am, where I studied, and what I bring to the table: real coursework, real honors, and a hands-on build log.</p>
       </div>
     </div>
 
@@ -4316,7 +3986,7 @@
           database management, and user-centered design.
         </p>
         <p class="about-desc">
-          I combine graphic design, UI/UX, and full-stack development to turn ideas into polished, working products —
+          I combine graphic design, UI/UX, and full stack development to turn ideas into polished, working products,
           clean interfaces, reliable code, and small AI automations that make everyday tasks easier.
         </p>
         <div class="skill-tags">
@@ -4332,7 +4002,7 @@
             stroke-linejoin="round" aria-hidden="true">
             <path d="M20 6 9 17l-5-5" />
           </svg>
-          Highly productive &amp; organized — independent and collaborative.
+          Highly productive &amp; organized, independent and collaborative.
         </div>
         <a href="#certifications" class="btn-about">See my certifications
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
@@ -5053,7 +4723,7 @@
         <h2 class="hero-title">Proof of work, <em>earned</em>.</h2>
         <p class="hero-sub">
           Every certificate I've earned across cloud, programming, networking, design, and career development.
-          Hover any card and click to view it full-size — all 16 are real, verifiable credentials.
+          Hover any card and click to view it full size. All 16 are real, verifiable credentials.
         </p>
       </div>
       <div class="hero-stat" aria-hidden="true">
@@ -5204,7 +4874,7 @@
         <img id="certLightboxImg" src="" alt="" />
       </div>
       <div class="cert-lightbox-foot">
-        <span class="cert-lightbox-date" id="certLightboxDate">—</span>
+        <span class="cert-lightbox-date" id="certLightboxDate">·</span>
         <a class="cert-lightbox-pdf" id="certLightboxPdf" href="#" target="_blank" rel="noopener">
           Open original
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
@@ -5217,62 +4887,8 @@
     </div>
   </div>
 
-  <!-- ==================== PLAYER BAR ==================== -->
-  <div class="player-bar" id="playerBar" role="region" aria-label="Now playing">
-    <div class="pb-left">
-      <img class="pb-art" id="pbArt" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02de8eea4082c20ec1a5d91914" alt="sombr — undressed" onerror="this.onerror=null;this.src='assets/model-dither.png'" />
-      <div class="pb-meta">
-        <div class="pb-title" id="pbTitle">undressed</div>
-        <div class="pb-artist" id="pbArtist">sombr · official track</div>
-      </div>
-      <button class="pb-like" id="pbLike" type="button" aria-label="Like this track" aria-pressed="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.6-4.7-9.7-9.3C1.2 8 3.7 4.9 7.1 4.9c2.1 0 3.8 1.2 4.9 2.9 1.1-1.7 2.8-2.9 4.9-2.9 3.4 0 5.9 3.1 4.8 6.3-2.1 4.6-9.7 9.3-9.7 9.3z" /></svg>
-      </button>
-    </div>
-
-    <div class="pb-center">
-      <div class="pb-controls">
-        <button class="pb-ctl small" id="pbShuffle" type="button" aria-label="Shuffle" aria-pressed="false" title="Shuffle">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3.5 21 3.5 21 8.5"/><line x1="4" y1="20" x2="21" y2="3.5"/><polyline points="21 16 21 21 16 21"/><line x1="14.5" y1="14.5" x2="21" y2="20.5"/><line x1="4" y1="4" x2="9.5" y2="9.5"/></svg>
-        </button>
-        <button class="pb-ctl" id="pbPrev" type="button" aria-label="Previous track" title="Previous">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2.5v12H6zM20 6v12l-9.5-6z"/></svg>
-        </button>
-        <button class="pb-play" id="pbPlay" data-cursor-label="Play" type="button" aria-label="Play sombr — undressed" aria-pressed="false" title="Play / pause">
-          <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 5.5v13l11-6.5z"/></svg>
-          <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 5.5h3.6v13H7.5zM13 5.5h3.5v13H13z"/></svg>
-        </button>
-        <button class="pb-ctl" id="pbNext" type="button" aria-label="Next track" title="Next">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 6H18v12h-2.5zM4 6v12l9.5-6z"/></svg>
-        </button>
-        <button class="pb-ctl small" id="pbRepeat" type="button" aria-label="Repeat" aria-pressed="false" title="Repeat">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-        </button>
-      </div>
-      <div class="pb-progress">
-        <span class="pb-time" id="pbCurrentTime">0:00</span>
-        <div class="pb-seek" id="pbSeek" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-          <div class="pb-seek-fill" id="pbSeekFill"></div>
-        </div>
-        <span class="pb-time" id="pbDuration">0:00</span>
-      </div>
-    </div>
-
-    <div class="pb-right">
-      <a class="pb-spotify" id="pbSpotify" href="https://open.spotify.com/track/4AajxCEwGEsmHmT4H1TwjY" target="_blank" rel="noopener" title="Open sombr on Spotify" aria-label="Open sombr on Spotify">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7" /><path d="M9 7h8v8" /></svg>
-        <span class="pb-spotify-text">Spotify</span>
-      </a>
-      <button class="pb-ctl small" id="pbQueue" data-cursor-label="Queue" type="button" aria-label="Toggle queue" aria-pressed="false" title="Queue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="16" y2="6"/><line x1="4" y1="12" x2="13" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/><polygon points="18 12 23 15.5 18 19" fill="currentColor" stroke="none"/></svg>
-      </button>
-      <button class="pb-ctl small" id="pbFullscreen" type="button" aria-label="Fullscreen" title="Fullscreen">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-      </button>
-    </div>
-
-    <div class="pb-hidden" aria-hidden="true"><div id="ytPlayer"></div></div>
-  </div>
+  <!-- Hidden local audio source (sombr) -->
+  <audio id="localAudio" preload="auto" src="assets/audio/undressed.mp3"></audio>
 
   <!-- Toast -->
   <div class="np-toast" id="npToast" role="status" aria-live="polite">Link copied to clipboard</div>
@@ -5392,7 +5008,7 @@
         const cat = CERT_CATEGORIES[c.cat];
         return `<button class="cert-card" type="button" data-cat="${c.cat}" data-index="${i}" style="--delay:${(i % 4) * 0.07}s" aria-label="View ${c.name} certificate">
           <span class="cert-media">
-            <img src="${c.img}" alt="${c.name} — awarded to Radyn Ryu M. Maloles" width="1400" height="1010" />
+            <img src="${c.img}" alt="${c.name}, awarded to Radyn Ryu M. Maloles" width="1400" height="1010" />
             <span class="cert-view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.3" y2="16.3"/></svg>View</span>
           </span>
           <span class="cert-body">
@@ -5469,7 +5085,7 @@
       lbIssuer.textContent = c.issuer;
       lbTitle.textContent = c.name;
       lbImg.src = c.img;
-      lbImg.alt = `${c.name} — awarded to Radyn Ryu M. Maloles`;
+      lbImg.alt = `${c.name}, awarded to Radyn Ryu M. Maloles`;
       lbDate.textContent = c.date;
       lbPdf.href = c.pdf;
       lightbox.classList.add('open');
@@ -5500,38 +5116,18 @@
       if (e.key === 'Escape' && lightbox && lightbox.classList.contains('open')) closeCert();
     });
 
-    // ========== PLAYER: sombr (Spotify embed) ==========
+    // ========== LOCAL AUDIO PLAYER (sombr · local mp3s) ==========
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const TRACKS = [
-      { title: 'undressed', artist: 'sombr', sub: 'official track', uri: 'spotify:track:4AajxCEwGEsmHmT4H1TwjY', art: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02de8eea4082c20ec1a5d91914', open: 'https://open.spotify.com/track/4AajxCEwGEsmHmT4H1TwjY' },
-      { title: 'we never dated', artist: 'sombr', sub: 'official track', uri: 'spotify:track:7o3xJRQhpHRZ6IbyQX2xrp', art: 'https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02a866e6634ca8152aaa3834c1', open: 'https://open.spotify.com/track/7o3xJRQhpHRZ6IbyQX2xrp' },
+      { title: 'undressed', artist: 'sombr', src: 'assets/audio/undressed.mp3', art: 'assets/model-dither.png' },
+      { title: 'we never dated', artist: 'sombr', src: 'assets/audio/we-never-dated.mp3', art: 'assets/model-dither.png' },
     ];
 
     let trackIndex = 0;
     let isPlaying = false;
-    let playIntent = false;
-    let isShuffle = false;
-    let isRepeat = false;
-    let spotifyController = null;
-    let currentDurationMs = 0;
-    let currentPositionMs = 0;
 
-    const pbTitle = document.getElementById('pbTitle');
-    const pbArtist = document.getElementById('pbArtist');
-    const pbArt = document.getElementById('pbArt');
-    const pbPlay = document.getElementById('pbPlay');
-    const pbPrev = document.getElementById('pbPrev');
-    const pbNext = document.getElementById('pbNext');
-    const pbShuffle = document.getElementById('pbShuffle');
-    const pbRepeat = document.getElementById('pbRepeat');
-    const pbLike = document.getElementById('pbLike');
-    const pbCurrentTime = document.getElementById('pbCurrentTime');
-    const pbDuration = document.getElementById('pbDuration');
-    const pbSeek = document.getElementById('pbSeek');
-    const pbSeekFill = document.getElementById('pbSeekFill');
-    const pbSpotify = document.getElementById('pbSpotify');
-    const npToast = document.getElementById('npToast');
+    const localAudio = document.getElementById('localAudio');
 
     /* ---- Docked mini player (below the queue's lists) ---- */
     const npMini = document.getElementById('npMini');
@@ -5555,23 +5151,38 @@
       }
     }
 
-    /* Live transport clock: Spotify sends position about once a second,
-       so we extrapolate between updates for a smooth meter. */
-    let lastPosMs = 0;
-    let lastPosTs = performance.now();
-    const livePosMs = () => lastPosMs + (isPlaying ? performance.now() - lastPosTs : 0);
+    /* ---- Real-time spectrum for the meter (Web Audio) ---- */
+    let analyserCtx = null;
+    let analyser = null;
+    let analyserData = null;
 
-    /* Beat-synced meter. Spotify's audio is locked inside their iframe and can't be
-       tapped for real frequency data, so we drive the bars from a mid-tempo groove
-       (sombr sits in that range) phase-locked to the live track position.
-       Kick on the beat, hats on the eighths, plus a slow swell per bar. */
+    function ensureAnalyser() {
+      if (analyser) return true;
+      if (!localAudio) return false;
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return false;
+        analyserCtx = new AC();
+        const source = analyserCtx.createMediaElementSource(localAudio);
+        analyser = analyserCtx.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.smoothingTimeConstant = 0.82;
+        analyserData = new Uint8Array(analyser.frequencyBinCount);
+        source.connect(analyser);
+        analyser.connect(analyserCtx.destination);
+        if (analyserCtx.state === 'suspended') analyserCtx.resume().catch(() => {});
+        return true;
+      } catch (err) {
+        analyser = null;
+        analyserCtx = null;
+        return false;
+      }
+    }
+
+    /* Mid-tempo fallback (used only if Web Audio can't analyze the stream) */
     const EQ_BPM = 122;
-    const reducedMotionNow = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let eqRaf = null;
-    let eqLast = 0;
-
     const beatProfile = (beatPos, i) => {
-      const phase = beatPos - Math.floor(beatPos); // position inside the beat
+      const phase = beatPos - Math.floor(beatPos);
       const kick = Math.exp(-phase * 4.4);
       const hat = Math.exp(-((beatPos * 2) % 1) * 8.5) * 0.55;
       const swell = 0.62 + 0.38 * Math.sin(((beatPos % 8) / 8) * Math.PI * 2);
@@ -5584,26 +5195,50 @@
     };
 
     const EQ_FLAT = 6;
+    let eqRaf = null;
+    let eqLast = 0;
+
     const renderEqFrame = () => {
-      const beat = (livePosMs() / 1000) * (EQ_BPM / 60);
-      for (let i = 0; i < eqBars.length; i++) {
-        const a = beatProfile(beat + i * 0.021, i);
-        eqBars[i].style.height = `${(EQ_FLAT + a * (100 - EQ_FLAT)).toFixed(1)}%`;
-      }
-      for (let i = 0; i < headerEqSpans.length; i++) {
-        const a = beatProfile(beat + i * 0.09, i + 2);
-        headerEqSpans[i].style.height = `${(3 + a * 9).toFixed(1)}px`;
+      const timePos = localAudio ? (localAudio.currentTime || 0) : 0;
+      const beat = timePos * (EQ_BPM / 60);
+      if (analyser) {
+        analyser.getByteFrequencyData(analyserData);
+        for (let i = 0; i < eqBars.length; i++) {
+          const lo = Math.floor(Math.pow(128, i / EQ_BAR_COUNT));
+          const hi = Math.max(lo + 1, Math.floor(Math.pow(128, (i + 1) / EQ_BAR_COUNT)));
+          let sum = 0;
+          for (let j = lo; j < hi && j < analyserData.length; j++) sum += analyserData[j];
+          const v = Math.pow((sum / (hi - lo)) / 255, 0.85);
+          eqBars[i].style.height = `${(EQ_FLAT + v * (98 - EQ_FLAT)).toFixed(1)}%`;
+        }
+        for (let i = 0; i < headerEqSpans.length; i++) {
+          const lo = Math.floor(Math.pow(128, (i + 4) / headerEqSpans.length));
+          const hi = Math.max(lo + 1, Math.floor(Math.pow(128, (i + 5) / headerEqSpans.length)));
+          let sum = 0;
+          for (let j = lo; j < hi && j < analyserData.length; j++) sum += analyserData[j];
+          const v = (sum / (hi - lo)) / 255;
+          headerEqSpans[i].style.height = `${(3 + v * 9).toFixed(1)}px`;
+        }
+      } else {
+        for (let i = 0; i < eqBars.length; i++) {
+          const a = beatProfile(beat + i * 0.021, i);
+          eqBars[i].style.height = `${(EQ_FLAT + a * (100 - EQ_FLAT)).toFixed(1)}%`;
+        }
+        for (let i = 0; i < headerEqSpans.length; i++) {
+          const a = beatProfile(beat + i * 0.09, i + 2);
+          headerEqSpans[i].style.height = `${(3 + a * 9).toFixed(1)}px`;
+        }
       }
     };
 
     const startEq = () => {
-      if (reducedMotionNow || eqRaf) { if (reducedMotionNow) renderEqFrame(); return; }
+      if (reducedMotion || eqRaf) { if (reducedMotion) renderEqFrame(); return; }
       const loop = (now) => {
         eqRaf = requestAnimationFrame(loop);
         if (now - eqLast < 33) return; // ~30 fps
         eqLast = now;
         renderEqFrame();
-        miniTimeFromLive();
+        timelineFromLive();
       };
       eqRaf = requestAnimationFrame(loop);
     };
@@ -5615,18 +5250,6 @@
       headerEqSpans.forEach(b => { b.style.height = '3px'; });
     };
 
-    const miniTimeFromLive = () => {
-      const ms = livePosMs();
-      if (currentDurationMs > 0) {
-        const ratio = Math.min(1, ms / currentDurationMs);
-        if (npMiniSeekFill) npMiniSeekFill.style.width = `${(ratio * 100).toFixed(2)}%`;
-        npMiniSeek?.setAttribute('aria-valuenow', String(Math.round(ratio * 100)));
-        if (npMiniCur) npMiniCur.textContent = formatTimeMs(ms);
-        if (pbSeekFill) pbSeekFill.style.width = `${(ratio * 100).toFixed(2)}%`;
-        if (pbCurrentTime) pbCurrentTime.textContent = formatTimeMs(ms);
-      }
-    };
-
     const formatTimeMs = (ms) => {
       const total = Math.max(0, Math.floor((Number(ms) || 0) / 1000));
       const m = Math.floor(total / 60);
@@ -5634,329 +5257,119 @@
       return `${m}:${String(s).padStart(2, '0')}`;
     };
 
+    const audioDurationMs = () => (localAudio && isFinite(localAudio.duration) ? localAudio.duration * 1000 : 0);
+
+    const timelineFromLive = () => {
+      const durationMs = audioDurationMs();
+      if (!localAudio || durationMs <= 0) return;
+      const ms = localAudio.currentTime * 1000;
+      const ratio = Math.min(1, Math.max(0, ms / durationMs));
+      if (npMiniSeekFill) npMiniSeekFill.style.width = `${(ratio * 100).toFixed(2)}%`;
+      npMiniSeek?.setAttribute('aria-valuenow', String(Math.round(ratio * 100)));
+      if (npMiniCur) npMiniCur.textContent = formatTimeMs(ms);
+    };
+
     function renderTrack() {
       const t = TRACKS[trackIndex];
-      if (pbTitle) pbTitle.textContent = t.title;
-      if (pbArtist) pbArtist.textContent = `${t.artist} · ${t.sub}`;
-      if (pbArt) { pbArt.src = t.art; pbArt.alt = `${t.artist} — ${t.title}`; }
-      if (pbSpotify) pbSpotify.href = t.open;
-      if (npMiniArt) { npMiniArt.src = t.art; npMiniArt.alt = `${t.artist} — ${t.title}`; }
+      if (npMiniArt) { npMiniArt.src = t.art; npMiniArt.alt = `${t.artist} · ${t.title}`; }
       if (npMiniTitle) npMiniTitle.textContent = t.title;
       if (npMiniArtist) npMiniArtist.textContent = t.artist;
       if (npMiniPlay) {
         npMiniPlay.setAttribute('aria-pressed', String(isPlaying));
-        npMiniPlay.setAttribute('aria-label', `Toggle play — ${t.artist} — ${t.title}`);
-      }
-      if (pbPlay) {
-        pbPlay.setAttribute('aria-pressed', String(isPlaying));
-        pbPlay.setAttribute('aria-label', `Play ${t.artist} — ${t.title}`);
+        npMiniPlay.setAttribute('aria-label', `Toggle play · ${t.artist} · ${t.title}`);
       }
     }
 
     function setPlayingUI(playing) {
-      isPlaying = playing;
-      if (pbPlay) {
-        pbPlay.classList.toggle('is-playing', playing);
-        if (playing) pbPlay.classList.remove('attention');
-      }
+      isPlaying = !!playing;
       if (npMini) {
-        npMini.classList.toggle('is-playing', playing);
-        npMini.classList.toggle('is-paused', !playing);
+        npMini.classList.toggle('is-playing', isPlaying);
+        npMini.classList.toggle('is-paused', !isPlaying);
       }
       document.querySelectorAll('.np-eq').forEach(eq => {
         eq.querySelectorAll('span').forEach(s => {
-          // JS engine drives these bars in sync with the beat; only fall back to the CSS bounce when paused.
-          s.style.animation = playing ? 'none' : '';
-          s.style.animationPlayState = playing ? 'running' : 'paused';
+          s.style.animation = isPlaying ? 'none' : '';
+          s.style.animationPlayState = isPlaying ? 'running' : 'paused';
         });
       });
-      if (playing) {
+      if (isPlaying) {
         startEq();
       } else {
         stopEq();
-        miniTimeFromLive();
-      }
-      if (playing && typeof window.__stopAutoplayUnlock === 'function') {
-        window.__stopAutoplayUnlock();
-      }
-      if (playing && window.__playerBarController) {
-        window.__playerBarController.setVisible(true);
+        timelineFromLive();
       }
     }
 
-    function switchTrack(index, autoplay) {
+    function loadTrack(index, autoplay) {
       trackIndex = ((index % TRACKS.length) + TRACKS.length) % TRACKS.length;
-      currentPositionMs = 0;
-      currentDurationMs = 0;
-      lastPosMs = 0;
-      lastPosTs = performance.now();
-      if (pbSeekFill) pbSeekFill.style.width = '0%';
+      if (!localAudio) return;
+      localAudio.pause();
+      localAudio.src = TRACKS[trackIndex].src;
+      localAudio.load();
       if (npMiniSeekFill) npMiniSeekFill.style.width = '0%';
-      if (pbCurrentTime) pbCurrentTime.textContent = '0:00';
       if (npMiniCur) npMiniCur.textContent = '0:00';
       if (npMiniDur) npMiniDur.textContent = '0:00';
-      if (pbDuration) pbDuration.textContent = '0:00';
       renderTrack();
-      if (spotifyController && spotifyController.loadUri) {
-        spotifyController.loadUri(TRACKS[trackIndex].uri);
-        if (autoplay) spotifyController.play();
+      if (autoplay) {
+        const p = localAudio.play();
+        if (p && p.catch) p.catch(() => setPlayingUI(false));
       }
     }
 
     function togglePlay() {
-      if (!spotifyController) return;
-      playIntent = !playIntent;
-      // Update the UI immediately from the intent — no waiting on Spotify's
-      // ~1s playback_update echo, so rapid clicks never flicker.
-      setPlayingUI(playIntent);
-      try {
-        if (playIntent) spotifyController.play();
-        else spotifyController.pause();
-      } catch (err) { /* still blocked or controller busy */ }
+      if (!localAudio) return;
+      if (localAudio.paused) {
+        ensureAnalyser();
+        const p = localAudio.play();
+        if (p && p.catch) p.catch(() => setPlayingUI(false));
+      } else {
+        localAudio.pause();
+      }
     }
 
     function nextTrack() {
-      if (isShuffle && TRACKS.length > 1) {
-        let r;
-        do { r = Math.floor(Math.random() * TRACKS.length); } while (r === trackIndex);
-        switchTrack(r, true);
-      } else {
-        switchTrack(trackIndex + 1, true);
-      }
+      loadTrack(trackIndex + 1, true);
     }
 
-    function prevTrack() {
-      if (currentPositionMs > 4000 && spotifyController && spotifyController.seek) {
-        spotifyController.seek(0);
-        return;
-      }
-      switchTrack(trackIndex - 1, true);
-    }
-
-    window.onSpotifyIframeApiReady = function (IFrameAPI) {
-      const options = { uri: TRACKS[trackIndex].uri, width: '1', height: '1' };
-      IFrameAPI.createController(document.getElementById('ytPlayer'), options, function (EmbedController) {
-        spotifyController = EmbedController;
-        EmbedController.addListener('playback_update', function (e) {
-          const d = (e && e.data) || {};
-          currentPositionMs = Number(d.position) || 0;
-          currentDurationMs = Number(d.duration) || 0;
-          lastPosMs = currentPositionMs;
-          lastPosTs = performance.now();
-          isPlaying = !d.isPaused;
-          playIntent = isPlaying;
-          setPlayingUI(isPlaying);
-          if (pbDuration) pbDuration.textContent = formatTimeMs(currentDurationMs);
-          if (npMiniDur) npMiniDur.textContent = formatTimeMs(currentDurationMs);
-          miniTimeFromLive();
-          if (currentDurationMs > 0 && currentPositionMs >= currentDurationMs - 120 && d.isPaused) {
-            if (isRepeat) {
-              EmbedController.restart();
-              EmbedController.play();
-            } else {
-              nextTrack();
-            }
-          }
-        });
-        renderTrack();
-        // Try hard to start on load. If the browser blocks un-gestured sound,
-        // keep retrying (including on the visitor's first gesture) until it starts.
-        const attempt = () => {
-          if (isPlaying) return;
-          if (spotifyController) {
-            try { EmbedController.play(); } catch (err) { /* blocked until gesture */ }
-          } else {
-            setTimeout(attempt, 400);
-          }
-        };
-        [0, 500, 1100, 1800, 2600, 4000, 6000, 9000, 13000, 18000, 24000].forEach((delay) => setTimeout(attempt, delay));
-        // Gentle nudge on the play button until audio actually starts
-        setTimeout(() => {
-          if (!isPlaying && pbPlay) pbPlay.classList.add('attention');
-        }, 2600);
-      });
-    };
-
-    const spotifyScript = document.createElement('script');
-    spotifyScript.src = 'https://open.spotify.com/embed/iframe-api/v1';
-    spotifyScript.async = true;
-    document.head.appendChild(spotifyScript);
-
-    function showPlayerToast(msg) {
-      if (!npToast) return;
-      npToast.textContent = msg;
-      npToast.classList.add('show');
-      setTimeout(() => npToast.classList.remove('show'), 2600);
-    }
-
-    if (pbPlay) pbPlay.addEventListener('click', togglePlay);
-    if (pbPrev) pbPrev.addEventListener('click', prevTrack);
-    if (pbNext) pbNext.addEventListener('click', nextTrack);
-    if (pbShuffle) pbShuffle.addEventListener('click', () => {
-      isShuffle = !isShuffle;
-      pbShuffle.classList.toggle('is-on', isShuffle);
-      pbShuffle.setAttribute('aria-pressed', String(isShuffle));
-    });
-    if (pbRepeat) pbRepeat.addEventListener('click', () => {
-      isRepeat = !isRepeat;
-      pbRepeat.classList.toggle('is-on', isRepeat);
-      pbRepeat.setAttribute('aria-pressed', String(isRepeat));
-    });
-    if (pbLike) pbLike.addEventListener('click', () => {
-      const on = pbLike.classList.toggle('is-on');
-      pbLike.setAttribute('aria-pressed', String(on));
-      if (on) showPlayerToast('Liked — added to your favorites.');
-    });
-    if (pbSeek) pbSeek.addEventListener('click', (e) => {
-      if (!spotifyController || !spotifyController.seek || currentDurationMs <= 0) return;
-      const rect = pbSeek.getBoundingClientRect();
-      const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-      spotifyController.seek(ratio * currentDurationMs);
-    });
-    if (pbSeek) pbSeek.addEventListener('keydown', (e) => {
-      if (!spotifyController || !spotifyController.seek || currentDurationMs <= 0) return;
-      if (e.key === 'ArrowLeft') spotifyController.seek(Math.max(0, currentPositionMs - 5000));
-      if (e.key === 'ArrowRight') spotifyController.seek(Math.min(currentDurationMs, currentPositionMs + 5000));
-    });
-
-    /* ---- Docked mini player wiring ---- */
+    /* ---- Wire the docked mini player ---- */
     if (npMiniPlay) npMiniPlay.addEventListener('click', togglePlay);
-    if (npMiniSeek) npMiniSeek.addEventListener('click', (e) => {
-      if (!spotifyController || !spotifyController.seek || currentDurationMs <= 0) return;
-      const rect = npMiniSeek.getBoundingClientRect();
-      const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-      spotifyController.seek(ratio * currentDurationMs);
-    });
-    if (npMiniSeek) npMiniSeek.addEventListener('keydown', (e) => {
-      if (!spotifyController || !spotifyController.seek || currentDurationMs <= 0) return;
-      if (e.key === 'ArrowLeft') spotifyController.seek(Math.max(0, currentPositionMs - 5000));
-      if (e.key === 'ArrowRight') spotifyController.seek(Math.min(currentDurationMs, currentPositionMs + 5000));
-    });
+    if (npMiniSeek) {
+      const seekTo = (clientX) => {
+        const duration = audioDurationMs();
+        if (!localAudio || duration <= 0) return;
+        const rect = npMiniSeek.getBoundingClientRect();
+        const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+        localAudio.currentTime = (ratio * duration) / 1000;
+        timelineFromLive();
+      };
+      npMiniSeek.addEventListener('click', (e) => seekTo(e.clientX));
+      npMiniSeek.addEventListener('keydown', (e) => {
+        const duration = audioDurationMs();
+        if (!localAudio || duration <= 0) return;
+        const step = 5000 / 1000;
+        if (e.key === 'ArrowLeft') localAudio.currentTime = Math.max(0, localAudio.currentTime - step);
+        if (e.key === 'ArrowRight') localAudio.currentTime = Math.min(localAudio.duration, localAudio.currentTime + step);
+        timelineFromLive();
+      });
+    }
+
+    if (localAudio) {
+      localAudio.addEventListener('play', () => setPlayingUI(true));
+      localAudio.addEventListener('pause', () => setPlayingUI(false));
+      localAudio.addEventListener('ended', () => nextTrack());
+      localAudio.addEventListener('loadedmetadata', () => {
+        if (npMiniDur) npMiniDur.textContent = formatTimeMs(audioDurationMs());
+        timelineFromLive();
+      });
+      localAudio.addEventListener('durationchange', () => {
+        if (npMiniDur) npMiniDur.textContent = formatTimeMs(audioDurationMs());
+      });
+      localAudio.addEventListener('timeupdate', timelineFromLive);
+    }
+
     // Start paused: flatten the meter and show the play triangle
     setPlayingUI(false);
     renderTrack();
-
-    // ========== SPOTIFY HERO: tabs, queue, photos, actions ==========
-    const npTabQueue = document.getElementById('npTabQueue');
-    const npTabRecent = document.getElementById('npTabRecent');
-    const npPanelQueue = document.getElementById('npPanelQueue');
-    const npPanelRecent = document.getElementById('npPanelRecent');
-    if (npTabQueue && npTabRecent) {
-      npTabQueue.addEventListener('click', () => {
-        npTabQueue.classList.add('active');
-        npTabRecent.classList.remove('active');
-        npTabQueue.setAttribute('aria-selected', 'true');
-        npTabRecent.setAttribute('aria-selected', 'false');
-        npPanelQueue.classList.add('active');
-        npPanelRecent.classList.remove('active');
-        npPanelRecent.hidden = true;
-      });
-      npTabRecent.addEventListener('click', () => {
-        npTabRecent.classList.add('active');
-        npTabQueue.classList.remove('active');
-        npTabRecent.setAttribute('aria-selected', 'true');
-        npTabQueue.setAttribute('aria-selected', 'false');
-        npPanelRecent.classList.add('active');
-        npPanelQueue.classList.remove('active');
-        npPanelRecent.hidden = false;
-      });
-    }
-
-    // Queue rows and tour rows scroll to their section
-    document.querySelectorAll('[data-scroll]').forEach(el => {
-      el.addEventListener('click', () => {
-        const target = document.querySelector(el.getAttribute('data-scroll'));
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (document.body.classList.contains('queue-open')) document.body.classList.remove('queue-open');
-      });
-    });
-
-    // Top action icons
-    const npTopScroll = document.getElementById('npTopScroll');
-    const npFullscreen = document.getElementById('npFullscreen');
-    const npShare = document.getElementById('npShare');
-    const npMore = document.getElementById('npMore');
-    if (npTopScroll) npTopScroll.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    if (npFullscreen) npFullscreen.addEventListener('click', () => {
-      const target = document.getElementById('hero');
-      if (!target) return;
-      if (document.fullscreenElement) document.exitFullscreen();
-      else if (target.requestFullscreen) target.requestFullscreen();
-    });
-    const showToast = (msg) => {
-      if (!npToast) return;
-      npToast.textContent = msg;
-      npToast.classList.add('show');
-      setTimeout(() => npToast.classList.remove('show'), 2600);
-    };
-    if (npShare) npShare.addEventListener('click', async () => {
-      const url = window.location.href;
-      try {
-        await navigator.clipboard.writeText(url);
-        showToast('Link copied to clipboard.');
-      } catch (e) {
-        showToast('Link ready to paste: ' + url);
-      }
-    });
-    if (npMore) npMore.addEventListener('click', () => {
-      const pref = document.getElementById('prefToggle');
-      if (pref) pref.click();
-    });
-
-    // Queue toggle (close button + mobile overlay + fullscreen button in player bar)
-    const npQueueClose = document.getElementById('npQueueClose');
-    const pbQueue = document.getElementById('pbQueue');
-    const pbFullscreen = document.getElementById('pbFullscreen');
-    if (npQueueClose) npQueueClose.addEventListener('click', () => document.body.classList.remove('queue-open'));
-    if (pbQueue) pbQueue.addEventListener('click', () => {
-      const on = document.body.classList.toggle('queue-open');
-      pbQueue.classList.toggle('is-on', on);
-      pbQueue.setAttribute('aria-pressed', String(on));
-    });
-    if (pbFullscreen) pbFullscreen.addEventListener('click', () => {
-      const target = document.getElementById('hero');
-      if (!target) return;
-      if (document.fullscreenElement) document.exitFullscreen();
-      else if (target.requestFullscreen) target.requestFullscreen();
-    });
-
-    // Photo lightbox for the top cards
-    const npPhotoBox = document.getElementById('npPhotoBox');
-    const npPhotoImg = document.getElementById('npPhotoImg');
-    const npPhotoClose = document.getElementById('npPhotoClose');
-    let photoLastFocus = null;
-
-    function openPhoto(src, caption) {
-      if (!npPhotoBox) return;
-      photoLastFocus = document.activeElement;
-      npPhotoImg.src = src;
-      npPhotoImg.alt = caption || '';
-      npPhotoBox.classList.add('open');
-      npPhotoBox.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      if (npPhotoClose) npPhotoClose.focus();
-    }
-
-    function closePhoto() {
-      if (!npPhotoBox) return;
-      npPhotoBox.classList.remove('open');
-      npPhotoBox.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      if (photoLastFocus) photoLastFocus.focus();
-    }
-
-    document.querySelectorAll('.np-video').forEach(btn => {
-      btn.addEventListener('click', () => {
-        openPhoto(btn.getAttribute('data-photo'), btn.getAttribute('data-caption'));
-      });
-    });
-    if (npPhotoClose) npPhotoClose.addEventListener('click', closePhoto);
-    if (npPhotoBox) {
-      npPhotoBox.addEventListener('click', e => { if (e.target === npPhotoBox) closePhoto(); });
-    }
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && npPhotoBox && npPhotoBox.classList.contains('open')) closePhoto();
-    });
 
     // ========== TARGET CURSOR (corner brackets + dot, difference blend) ==========
     (function initTargetCursor() {
@@ -6206,15 +5619,14 @@
       function enterStudio() {
         if (entering) return;
         entering = true;
-        // This runs inside a real user gesture, so the browser allows audible playback.
-        if (spotifyController) { try { spotifyController.play(); } catch (err) { /* embed still warming up */ } }
-        // If the embed isn't ready yet, fire as soon as it is (the gesture already happened).
-        const poll = setInterval(() => {
-          if (spotifyController) { try { spotifyController.play(); } catch (err) { /* */ } clearInterval(poll); }
-        }, 200);
-        setTimeout(() => clearInterval(poll), 8000);
+        // A real user gesture — the browser allows audible playback here.
+        if (localAudio) {
+          const p = localAudio.play();
+          if (p && p.catch) p.catch(() => setPlayingUI(false));
+        }
         welcome.classList.add('is-playing');
         document.body.classList.remove('welcome-lock');
+        if (window.__startSplash) window.__startSplash();
         // Let the "Now playing" strip + fill play out, then hand over to the page.
         setTimeout(() => {
           welcome.classList.add('is-leaving');
@@ -6232,64 +5644,6 @@
           enterStudio();
         }
       });
-    })();
-
-    // ========== PLAYER BAR: appears at the second section (#about),
-    //   hides on scroll-down, returns on scroll-up ==========
-    (function initPlayerReveal() {
-      const playerBar = document.getElementById('playerBar');
-      if (!playerBar) return;
-      const about = document.getElementById('about');
-      const NAV_H = 74; // account for the fixed nav before revealing
-      let lastY = window.scrollY || 0;
-      let visible = false;
-
-      const setVisible = (v) => {
-        if (v === visible) return;
-        visible = v;
-        playerBar.classList.toggle('is-visible', v);
-      };
-      window.__playerBarController = { setVisible };
-
-      const aboutTop = () => {
-        if (!about) return 400;
-        const rect = about.getBoundingClientRect();
-        return rect.top + (window.scrollY || 0) - NAV_H;
-      };
-
-      function onScroll() {
-        if (isPlaying) { setVisible(true); lastY = window.scrollY || 0; return; }
-        const y = window.scrollY || document.documentElement.scrollTop || 0;
-        const top = aboutTop(); // about absolute top minus nav height
-        const REVEAL = 160; // show once the second section is a bit into view
-        if (y < top - REVEAL) { setVisible(false); lastY = y; return; }
-        const cameFromAbove = lastY < top - REVEAL;
-        if (cameFromAbove) { setVisible(true); lastY = y; return; }
-        const delta = y - lastY;
-        if (Math.abs(delta) > 6) setVisible(delta < 0);
-        lastY = y;
-      }
-
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll(); // start hidden (splash/intro shows first)
-
-      // Browsers may mute/block programmatic playback until the visitor
-      // interacts. Retry silently on the first gesture — no "tap to start".
-      const events = ['pointerdown', 'touchstart', 'keydown', 'wheel'];
-      const stopUnlock = () => {
-        events.forEach((evt) => window.removeEventListener(evt, unlock));
-      };
-      let unlockTries = 0;
-      function unlock() {
-        if (isPlaying) { stopUnlock(); return; }
-        unlockTries += 1;
-        if (spotifyController) {
-          try { spotifyController.play(); } catch (err) { /* still blocked */ }
-        }
-        if (unlockTries >= 12) stopUnlock();
-      }
-      window.__stopAutoplayUnlock = stopUnlock;
-      events.forEach((evt) => window.addEventListener(evt, unlock, { passive: true }));
     })();
 
     // ========== 3D SCROLL EFFECTS — a different one per section ==========
@@ -6522,6 +5876,18 @@
       function onReady() {
         const splash = document.getElementById('intro');
         if (!splash) { showImage(); return; }
+        // Hold the assembly behind the welcome gate — it starts when Enter Studio is pressed.
+        if (document.body.classList.contains('welcome-lock')) {
+          window.__startSplash = function () {
+            if (running || img.classList.contains('ready')) return;
+            start();
+          };
+          return;
+        }
+        window.__startSplash = function () {
+          if (running || img.classList.contains('ready')) return;
+          start();
+        };
         const opts = { threshold: 0.1 };
         const io = new IntersectionObserver((entries) => {
           entries.forEach(en => {
@@ -6685,7 +6051,7 @@
           return;
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          setStatus('That email address looks incomplete — please double-check it.', false);
+          setStatus('That email address looks incomplete. Please double-check it.', false);
           return;
         }
 
@@ -6710,17 +6076,17 @@
           const data = await res.json().catch(() => ({}));
           if (String(data.success) === 'false') throw new Error(data.message || 'rejected');
 
-          setStatus(`Thanks, ${name.split(/\s+/)[0]}! Your message is on its way — I'll reply soon.`, true);
+          setStatus(`Thanks, ${name.split(/\s+/)[0]}! Your message is on its way. I'll reply soon.`, true);
           contactForm.reset();
           submitBtn.textContent = 'Message sent ✓';
           setTimeout(() => { submitBtn.textContent = DEFAULT_LABEL; }, 3200);
         } catch (err) {
           // The service needs one-time activation, or the network failed.
           // Fall back to the visitor's email app with the message prefilled so it still reaches you.
-          setStatus(`Automatic delivery is not active yet — your email app will open with the message prefilled. You can also write to ${CONTACT_EMAIL}.`, false);
+          setStatus(`Automatic delivery is not active yet. Your email app will open with the message prefilled. You can also write to ${CONTACT_EMAIL}.`, false);
           submitBtn.textContent = 'Opening email…';
           const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
-          const body = encodeURIComponent(`${message}\n\n— ${name}\nReply to: ${email}`);
+          const body = encodeURIComponent(`${message}\n\n${name}\nReply to: ${email}`);
           setTimeout(() => { window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`; }, 600);
           setTimeout(() => { submitBtn.textContent = DEFAULT_LABEL; }, 3200);
         } finally {
