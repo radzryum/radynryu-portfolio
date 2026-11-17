@@ -1022,280 +1022,6 @@
       .np-video { animation: none; transition: none; }
     }
 
-    /* ===================== WELCOME — ENTRY GATE ===================== */
-    body.welcome-lock { overflow: hidden; }
-
-    .welcome {
-      position: fixed;
-      inset: 0;
-      z-index: 480;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:
-        radial-gradient(1100px 640px at 50% -18%, rgba(74, 222, 128, 0.15), transparent 62%),
-        radial-gradient(900px 560px at 88% 112%, rgba(74, 222, 128, 0.07), transparent 55%),
-        #0c0c0c;
-      overflow: hidden;
-      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.65s;
-      visibility: visible;
-    }
-
-    .welcome.is-leaving {
-      opacity: 0;
-      transform: scale(0.92);
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .welcome[hidden] {
-      display: none !important;
-    }
-
-    .welcome-grid {
-      position: absolute;
-      inset: -10%;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-      background-size: 72px 72px;
-      mask-image: radial-gradient(circle at 50% 42%, black 32%, transparent 78%);
-      -webkit-mask-image: radial-gradient(circle at 50% 42%, black 32%, transparent 78%);
-      pointer-events: none;
-    }
-
-    .welcome-glow {
-      position: absolute;
-      left: 50%;
-      top: 44%;
-      width: min(88vw, 560px);
-      aspect-ratio: 1;
-      translate: -50% -50%;
-      background: radial-gradient(circle, rgba(74, 222, 128, 0.09) 0%, rgba(74, 222, 128, 0.03) 42%, transparent 70%);
-      pointer-events: none;
-      animation: welcomeGlow 6s ease-in-out infinite alternate;
-    }
-
-    @keyframes welcomeGlow {
-      from { opacity: 0.7; transform: scale(0.94); }
-      to { opacity: 1; transform: scale(1.06); }
-    }
-
-    .welcome-inner {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 18px;
-      padding: 24px 28px;
-      max-width: 1020px;
-    }
-
-    .welcome-eyebrow {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.34em;
-      text-transform: uppercase;
-      color: var(--accent);
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .welcome-eyebrow::before,
-    .welcome-eyebrow::after {
-      content: "";
-      width: 34px;
-      height: 1px;
-      background: rgba(74, 222, 128, 0.5);
-    }
-
-    .welcome-title {
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.98;
-      text-wrap: balance;
-    }
-
-    .welcome-line { display: block; }
-    .welcome-lead {
-      font-size: clamp(17px, 2.3vw, 24px);
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #b7b7b7;
-      margin-bottom: 14px;
-    }
-
-    .welcome-huge {
-      font-size: clamp(44px, 7.4vw, 96px);
-      color: #f5f5f5;
-    }
-
-    .welcome-huge em {
-      font-style: normal;
-      color: transparent;
-      -webkit-text-stroke: 1.6px #4ade80;
-    }
-
-    .welcome-huge strong {
-      color: #4ade80;
-    }
-
-    .welcome-sub {
-      font-size: clamp(14px, 1.6vw, 17px);
-      line-height: 1.65;
-      color: #a7a7a7;
-      max-width: 560px;
-    }
-
-    .welcome-sub strong { color: #f0f0f0; }
-
-    .welcome-enter {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      margin-top: 8px;
-      padding: 18px 30px 18px 34px;
-      border-radius: 999px;
-      background: #4ade80;
-      color: #0c0c0c;
-      font-size: 15px;
-      font-weight: 900;
-      letter-spacing: 0.02em;
-      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background 0.25s ease, box-shadow 0.25s ease;
-      box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.45), 0 18px 48px rgba(74, 222, 128, 0.22);
-    }
-
-    .welcome-enter:hover,
-    .welcome-enter:focus-visible {
-      transform: translateY(-3px) scale(1.03);
-      background: #6ff09b;
-      box-shadow: 0 0 0 6px rgba(74, 222, 128, 0.18), 0 26px 64px rgba(74, 222, 128, 0.3);
-      outline: none;
-    }
-
-    .welcome-enter:active { transform: scale(0.96); }
-
-    .welcome-enter-arrow { width: 19px; height: 19px; }
-
-    .welcome-note {
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #7a7a7a;
-      margin-top: -4px;
-    }
-
-    .welcome-note kbd {
-      display: inline-block;
-      padding: 2px 8px;
-      border: 1px solid #3a3a3a;
-      border-bottom-width: 2px;
-      border-radius: 6px;
-      background: #1c1c1c;
-      color: #d4d4d4;
-      font-family: inherit;
-      font-size: 10px;
-      margin: 0 2px;
-    }
-
-    /* "Now playing" strip shown after Enter is pressed */
-    .welcome-now {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 18px;
-      border-radius: 14px;
-      border: 1px solid rgba(74, 222, 128, 0.34);
-      background: rgba(18, 18, 18, 0.92);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 60px rgba(74, 222, 128, 0.12);
-      opacity: 0;
-      transform: translateY(14px);
-      pointer-events: none;
-      transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-      position: absolute;
-      bottom: 54px;
-      left: 50%;
-      transform: translate(-50%, 14px);
-      min-width: 300px;
-    }
-
-    .welcome.is-playing .welcome-now { opacity: 1; transform: translate(-50%, 0); }
-    .welcome.is-playing .welcome-enter,
-    .welcome.is-playing .welcome-note { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-    .welcome-enter,
-    .welcome-note { transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background 0.25s ease, box-shadow 0.25s ease, opacity 0.3s ease; }
-
-    .welcome-eq { transform: translateY(1px); height: 18px; }
-    .welcome-eq span { animation: eqBounce 0.9s ease-in-out infinite; }
-    .welcome-eq span:nth-child(1) { animation-delay: 0s; }
-    .welcome-eq span:nth-child(2) { animation-delay: 0.18s; }
-    .welcome-eq span:nth-child(3) { animation-delay: 0.36s; }
-    .welcome-eq span:nth-child(4) { animation-delay: 0.12s; }
-    .welcome-eq span:nth-child(5) { animation-delay: 0.27s; }
-
-    .welcome-now-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      text-align: left;
-      font-size: 12px;
-    }
-
-    .welcome-now-text strong { color: #f4f4f4; font-size: 13px; letter-spacing: -0.1px; }
-    .welcome-now-text span { color: #4ade80; font-size: 10px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; }
-
-    .welcome-now-bar {
-      position: absolute;
-      left: 12px;
-      right: 12px;
-      bottom: -1px;
-      height: 3px;
-      border-radius: 2px;
-      overflow: hidden;
-      background: rgba(74, 222, 128, 0.15);
-    }
-
-    .welcome-now-fill {
-      position: absolute;
-      inset: 0;
-      width: 0%;
-      background: linear-gradient(90deg, #22c55e, #4ade80);
-      transform-origin: left center;
-    }
-
-    .welcome.is-playing .welcome-now-fill { animation: welcomeFill 1.5s cubic-bezier(0.3, 0.8, 0.4, 1) forwards; }
-
-    @keyframes welcomeFill {
-      from { width: 4%; }
-      to { width: 100%; }
-    }
-
-    /* When the overlay is leaving, stop the splash intro behind from being a relic */
-    body:not(.welcome-lock) .splash { }
-
-    @media (max-width: 700px) {
-      .welcome-inner { gap: 14px; padding: 20px 18px; }
-      .welcome-huge { font-size: clamp(38px, 13.4vw, 56px); }
-      .welcome-lead { font-size: 12px; margin-bottom: 10px; letter-spacing: 0.04em; }
-      .welcome-eyebrow { font-size: 7.5px; letter-spacing: 0.14em; white-space: nowrap; }
-      .welcome-eyebrow::before, .welcome-eyebrow::after { width: 18px; }
-      .welcome-sub { font-size: 13.5px; }
-      .welcome-note { display: none; }
-      .welcome-now { bottom: 32px; min-width: 0; width: calc(100% - 32px); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .welcome-glow,
-      .welcome-eq span { animation: none !important; }
-      .welcome { transition: opacity 0.25s ease, visibility 0.25s; }
-      .welcome.is-leaving { transform: none; }
-      .welcome.is-playing .welcome-now-fill { animation: none; width: 100%; }
-    }
-
     /* ===================== SPLASH INTRO ===================== */
     .splash {
       position: relative;
@@ -3618,32 +3344,7 @@
   </style>
 </head>
 
-<body class="welcome-lock">
-
-  <!-- ==================== WELCOME — ENTRY GATE ==================== -->
-  <div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeSub">
-    <span class="welcome-glow" aria-hidden="true"></span>
-    <span class="welcome-grid" aria-hidden="true"></span>
-    <div class="welcome-inner">
-      <p class="welcome-eyebrow">Portfolio Sessions</p>
-      <h1 class="welcome-title" id="welcomeTitle">
-        <span class="welcome-line welcome-lead">Hey, I'm</span>
-        <span class="welcome-line welcome-huge"><strong>Radyn Ryu</strong></span>
-      </h1>
-      <p class="welcome-sub" id="welcomeSub">I design and build full stack apps and games. You are now exploring my portfolio, with a soundtrack. Ten projects, two dozen certificates and one studio.</p>
-      <button class="welcome-enter" id="welcomeEnter" type="button" aria-keyshortcuts="Enter" aria-describedby="welcomeNote">
-        <span class="welcome-enter-rings" aria-hidden="true"></span>
-        <span class="welcome-enter-label">Enter Studio</span>
-        <svg class="welcome-enter-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
-      </button>
-      <p class="welcome-note" id="welcomeNote">Headphones recommended. The music starts the moment you enter. Press <kbd>Enter</kbd>.</p>
-      <div class="welcome-now" id="welcomeNow" aria-live="polite">
-        <span class="np-eq welcome-eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
-        <span class="welcome-now-text"><strong>sombr · undressed</strong><span>Now playing</span></span>
-        <span class="welcome-now-bar" aria-hidden="true"><span class="welcome-now-fill"></span></span>
-      </div>
-    </div>
-  </div>
+<body>
 
   <!-- ==================== NAV ==================== -->
   <nav>
@@ -5371,6 +5072,32 @@
     setPlayingUI(false);
     renderTrack();
 
+    // Start music on the visitor's first gesture (browsers block un-gestured sound).
+    // If autoplay is allowed, it just starts; otherwise the first click unlocks it.
+    let autoplayStarted = false;
+    const startMusicOnce = () => {
+      if (autoplayStarted || !localAudio) return;
+      autoplayStarted = true;
+      const p = localAudio.play();
+      const cleanup = () => {
+        window.removeEventListener('pointerdown', startMusicOnce);
+        window.removeEventListener('keydown', startMusicOnce);
+        window.removeEventListener('touchstart', startMusicOnce);
+      };
+      if (p && p.catch) {
+        p.then(cleanup).catch(() => {
+          autoplayStarted = false; // let it retry on the next gesture
+        });
+      } else {
+        cleanup();
+      }
+    };
+    // Try immediately (works on Chromium-based browsers after a first gesture elsewhere)
+    localAudio.play().catch(() => {});
+    window.addEventListener('pointerdown', startMusicOnce, { passive: true });
+    window.addEventListener('touchstart', startMusicOnce, { passive: true });
+    window.addEventListener('keydown', startMusicOnce);
+
     // ========== TARGET CURSOR (corner brackets + dot, difference blend) ==========
     (function initTargetCursor() {
       const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -5608,43 +5335,6 @@
       window.addEventListener('blur', onLeave);
     })();
 
-    // ========== WELCOME — ENTRY GATE (Enter Studio starts the music) ==========
-    (function initWelcome() {
-      const welcome = document.getElementById('welcome');
-      if (!welcome) { document.body.classList.remove('welcome-lock'); return; }
-      const enterBtn = document.getElementById('welcomeEnter');
-      const PROGRESS_MS = 1600;
-      let entering = false;
-
-      function enterStudio() {
-        if (entering) return;
-        entering = true;
-        // A real user gesture — the browser allows audible playback here.
-        if (localAudio) {
-          const p = localAudio.play();
-          if (p && p.catch) p.catch(() => setPlayingUI(false));
-        }
-        welcome.classList.add('is-playing');
-        document.body.classList.remove('welcome-lock');
-        if (window.__startSplash) window.__startSplash();
-        // Let the "Now playing" strip + fill play out, then hand over to the page.
-        setTimeout(() => {
-          welcome.classList.add('is-leaving');
-          // Fully remove it from interaction once the fade finishes
-          setTimeout(() => { welcome.hidden = true; }, 750);
-        }, PROGRESS_MS);
-      }
-
-      if (enterBtn) {
-        enterBtn.addEventListener('click', enterStudio);
-        enterBtn.focus({ preventScroll: true });
-      }
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !entering && document.body.classList.contains('welcome-lock')) {
-          enterStudio();
-        }
-      });
-    })();
 
     // ========== 3D SCROLL EFFECTS — a different one per section ==========
     const FX_GROUPS = [
@@ -5876,19 +5566,7 @@
       function onReady() {
         const splash = document.getElementById('intro');
         if (!splash) { showImage(); return; }
-        // Hold the assembly behind the welcome gate — it starts when Enter Studio is pressed.
-        if (document.body.classList.contains('welcome-lock')) {
-          window.__startSplash = function () {
-            if (running || img.classList.contains('ready')) return;
-            start();
-          };
-          return;
-        }
-        window.__startSplash = function () {
-          if (running || img.classList.contains('ready')) return;
-          start();
-        };
-        const opts = { threshold: 0.1 };
+          const opts = { threshold: 0.1 };
         const io = new IntersectionObserver((entries) => {
           entries.forEach(en => {
             if (en.isIntersecting) { start(); io.disconnect(); }
